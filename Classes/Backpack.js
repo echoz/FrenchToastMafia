@@ -3,12 +3,30 @@ class Backpack extends MonoBehaviour {
 	var items = new Array();
 
 	var activeItem : InventoryItem;
-	
+
+	private var collideItems = new Array();
+		
 	// gui
 	
 	// detect objects
-	function Update() {
-
+	function FixedUpdate() {
+		if (Input.GetKey("e") && (collideItems.length > 0)) {
+			for (var item : InventoryItem in collideItems) {
+				if (addItem(item)) {
+					DestroyImmediate(item.gameObject);
+				}
+			}
+			collideItems.clear();
+		}
+		Debug.Log(items.length);
+	}
+	
+	function notification(who : Object, msg : String, userInfo : Object) {
+		if (msg == "InItemSpace") {
+			collideItems.Add(who);	
+		} else if (msg == "OutItemSpace") {
+			collideItems.RemoveAt(indexOfItem(who, collideItems));
+		}
 	}
 	
 	// hardcore functions
@@ -21,7 +39,7 @@ class Backpack extends MonoBehaviour {
 		return currcapc;
 	}
 	
-	function indexOfItem(item : InventoryItem) {
+	function indexOfItem(item : Object, items : Array) {
 		for (var i=0;i<items.length;i++) {
 			if (items[i] == item) {
 				return i;	
@@ -31,8 +49,9 @@ class Backpack extends MonoBehaviour {
 	}
 	
 	function addItem(item : InventoryItem) {
-		if ((item.quantity * item.unitSpaceRequired) < (this.currentCapacity())) {
+		if (((item.quantity * item.unitSpaceRequired) + currentCapacity()) <= maxCapacity) {
 			items.Add(item);
+
 			return true;
 		} else {	
 			return false;
@@ -45,7 +64,7 @@ class Backpack extends MonoBehaviour {
 	}
 	
 	function removeItem(item : InventoryItem) {
-		items.RemoveAt(this.indexOfItem(item));	
+		items.RemoveAt(this.indexOfItem(item, items));	
 	}
 	
 	function removeItemAtIndex(idx : int) {
