@@ -17,12 +17,13 @@ class Player extends WorldObject {
 	
 	function Update() {
 		var playerCamera = GameObject.FindWithTag("Player");
-		var waterLevel = GameObject.FindWithTag("Water").transform.position.y;
-		
-		affectedByWater(waterLevel, playerCamera);
+		if (GameObject.FindWithTag("Water")) {
+			var waterLevel = GameObject.FindWithTag("Water").transform.position.y;
+			affectedByWater(waterLevel, playerCamera);
+		}
 
 	}
-	
+		
 	function affectedByWater(waterLevel : int, playerCamera : GameObject) {
 		if (waterLevel > playerCamera.transform.position.y) {
 			
