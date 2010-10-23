@@ -25,11 +25,11 @@ class Radio extends NPC {
 		for (var letter in word.ToCharArray()) {
 			instructions.guiText.text += letter;
 			if (instructionsSound) {
-				audio.PlayOneShot(instructionsSound);	
+				instructions.audio.PlayOneShot(instructionsSound);	
 			}
 			yield WaitForSeconds(instructionsLetterPause);
 		}
-		audio.Stop();
+		instructions.audio.Stop();
 	}
 
 	function Start() {
@@ -55,10 +55,14 @@ class Radio extends NPC {
 		GUI.Label(new Rect(Screen.width - 510, Screen.height - 600, 490,600), instructions.guiText.text, instructionsTextStyle);
 		GUI.Box(new Rect(10, 10, 300, 450),instructionsMorse);
 		
-		// display correct code stuff
-		var windowRect : Rect = new Rect(Screen.width/2 - 400, Screen.height/2 - 300, 800, 500);
-		if (CODE == CORRECT_CODE) {
-			GUI.Window(0,windowRect, WindowFunction, "");
+			
+		if (!PTTENABLED) {	
+			// display correct code stuff
+			var windowRect : Rect = new Rect(Screen.width/2 - 400, Screen.height/2 - 300, 800, 500);
+			if (CODE == CORRECT_CODE) {
+				Debug.Log("WHEEE");
+				GUI.Window(0,windowRect, WindowFunction, "");
+			}
 		}
 	}
 
@@ -115,6 +119,7 @@ class Radio extends NPC {
 				if (!on)
 					on = true;	
 			} else if (Physics.Raycast(ray, hit) && hit.collider.name == "PTT") {
+								
 				if (FREQ == CORRECT_FREQ) {
 					PTTENABLED = !PTTENABLED;
 				} 
