@@ -12,13 +12,18 @@ class Player extends WorldObject {
 	private var lastPlayedAudio : float;
 	
 	function Start() {
-		healthBarLength = Screen.width / 3;	
+		healthBarLength = Screen.width / 4;	
 	}
 	
 	function Update() {
 		var playerCamera = GameObject.FindWithTag("Player");
 		var waterLevel = GameObject.FindWithTag("Water").transform.position.y;
 		
+		affectedByWater(waterLevel, playerCamera);
+
+	}
+	
+	function affectedByWater(waterLevel : int, playerCamera : GameObject) {
 		if (waterLevel > playerCamera.transform.position.y) {
 			
 			if ((Time.realtimeSinceStartup - lastUpdateHealth) > healthSubtractInterval) {
@@ -35,7 +40,7 @@ class Player extends WorldObject {
 	
 	function OnGUI() {
 		GUI.Box(new Rect(10, 10, healthBarLength + 10, 20),"");
-		GUI.Box(new Rect(10, 10, Screen.width / 3 + 10, 20), health + "/" + maxHealth);
+		GUI.Box(new Rect(10, 10, Screen.width / 4 + 10, 20), health + "/" + maxHealth);
 	}	
 	
 	function adjustHealth(healthDelta : int) {
@@ -47,6 +52,6 @@ class Player extends WorldObject {
 		if (health > maxHealth)
 			health = maxHealth;
 			
-		healthBarLength = (Screen.width / 3) * (health / maxHealth);
+		healthBarLength = (Screen.width / 4) * (health / maxHealth);
 	}
 }

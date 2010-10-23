@@ -56,7 +56,7 @@ class Director extends MonoBehaviour {
 	
 	function findProps() {
 		water = GameObject.FindWithTag("Water");
-		thePlayer = GameObject.FindWithTag("GameController");
+		thePlayer = GameObject.FindWithTag("Player");
 	}
 	
 }

@@ -6,6 +6,18 @@ class Backpack extends MonoBehaviour {
 	
 	// gui
 	
+	// detect objects
+	function Update() {
+		var hit : RaycastHit;
+		var direction = GameObject.FindWithTag("Player").GetComponent(Camera).transform.forward;
+
+		if(Physics.Raycast(transform.position,direction,hit,10))
+		{
+			if (hit.collider.gameObject.tag == "items") {
+				Debug.Log(hit.collider.gameObject.GetComponent(InventoryItem).unitSpaceRequired);
+			}
+		}
+	}
 	
 	// hardcore functions
 	function currentCapacity() {

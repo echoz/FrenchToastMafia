@@ -4,4 +4,5 @@ class InventoryItem extends WorldObject {
 	
 	// gps, first aid, car keys, radio, food rations, rope
 	
+	
 }
