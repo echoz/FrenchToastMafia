@@ -1,4 +1,4 @@
 class WorldObject extends MonoBehaviour {
 	
-	var name : String = "";	
+	var worldName : String = "";	
 }
