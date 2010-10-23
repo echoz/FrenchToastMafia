@@ -2,6 +2,7 @@ class InventoryItem extends WorldObject {
 	var description : String;
 	var quantity : int;
 	var unitSpaceRequired: int;
+	var consummable : boolean;
 	
 	private var showWindow : boolean = false;
 	private var thePlayer : GameObject;
