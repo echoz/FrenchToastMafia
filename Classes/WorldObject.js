@@ -9,7 +9,7 @@ class WorldObject extends MonoBehaviour {
 	
 	function indexOfItem(item : Object, items : Array) {
 		for (var i=0;i<items.length;i++) {
-			if (items[i] == item) {
+			if (items[i] === item) {
 				return i;
 			}	
 		}
