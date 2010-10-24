@@ -1,43 +1,58 @@
 class Director extends MonoBehaviour {
 	
-	var timeLimit : int = 10; // in minutes
+	var timeLimit : int = 20; // in minutes
 	var hasState : boolean = false;
+	
+	var globalState = new Hashtable();
 	
 	private var gameState : int = 0;
 	private var water : GameObject;
 	private var thePlayer : GameObject;
 	private var gameController : GameObject;
 	
+	// state
 	private var backpack_items = new Array();
+	private var backpack_activeItem : int;
+	private var backpack_hasActive : boolean;
 	private var player_health : float;
+	private var player_position : Vector3;
+	private var player_rotation : Quaternion;
 	
 	private var previousLevelName : String;
 	
 	function Start() {
 		this.findProps();
-		DontDestroyOnLoad(this);
 	}
 	
 	function Awake() {
-		this.findProps();
+		DontDestroyOnLoad(this);
 	}
 	
 	function saveState() {
 		backpack_items = new Array();
 		copyArray(gameController.GetComponent(Backpack).items,backpack_items);
+		backpack_activeItem = gameController.GetComponent(Backpack).indexOfItem(gameController.GetComponent(Backpack).activeItem, gameController.GetComponent(Backpack).items);
+		backpack_hasActive = gameController.GetComponent(Backpack).hasActiveItem;
 		
 		player_health = gameController.GetComponent(Player).health;
+		
+		player_position = gameController.transform.position;
+		player_rotation = gameController.transform.rotation;
 		
 		hasState = true;
 
 	}
 	
 	function restoreState() {
+
 		gameController.GetComponent(Backpack).items.clear();
 		copyArray(backpack_items, gameController.GetComponent(Backpack).items);
-
-		gameController.GetComponent(Player).heath = player_health;
+		gameController.GetComponent(Backpack).hasActiveItem = backpack_hasActive;
+		gameController.GetComponent(Backpack).activeItem = gameController.GetComponent(Backpack).items[backpack_activeItem];
+		gameController.GetComponent(Backpack).cullEquippedItems();
 		
+		gameController.GetComponent(Player).health = player_health;
+				
 		hasState = false;
 	}
 	
@@ -46,7 +61,12 @@ class Director extends MonoBehaviour {
 		findProps();
 		if ((gameController) && (hasState)) {
 			restoreState();	
-		}		
+		}
+		if ((previousLevelName == Application.loadedLevelName) && (gameController)) {
+			gameController.transform.position = player_position;
+			gameController.transform.rotation = player_rotation;
+	
+		}
 	}
 
 	
@@ -57,12 +77,13 @@ class Director extends MonoBehaviour {
 	}
 	
 	function previous_level() {
-		Application.LoadLevel(previousLevelName);	
+		Application.LoadLevel(previousLevelName);
+
 	}
 	
 	function Update() {
 		if (Input.GetKeyUp("p")) {
-			saveState();	
+			Debug.Log(backpack_items);	
 		}	
 	}
 	
