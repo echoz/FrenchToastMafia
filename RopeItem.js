@@ -1,6 +1,6 @@
 class RopeItem extends InventoryItem {
 
-	function Start() {
+	function Awake() {
 		worldName  = "Rope";
 		description = "Useful for tying shit up.";
 		quantity = 1;

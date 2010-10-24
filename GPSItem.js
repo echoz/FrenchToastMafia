@@ -1,6 +1,6 @@
 class GPSItem extends InventoryItem {
 
-	function Start() {
+	function Awake() {
 		worldName  = "GPS";
 		description = "Global Positioning enabled mapping device";
 		quantity = 1;

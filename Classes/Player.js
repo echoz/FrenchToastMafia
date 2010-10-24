@@ -11,7 +11,7 @@ class Player extends WorldObject {
 	private var lastUpdateHealth : float = 0;
 	private var lastPlayedAudio : float;
 	
-	function Start() {
+	function Awake() {
 		healthBarLength = Screen.width / 4;	
 	}
 	

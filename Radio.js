@@ -32,7 +32,7 @@ class Radio extends NPC {
 		instructions.audio.Stop();
 	}
 
-	function Start() {
+	function Awake() {
 		on = false;
 		var word = instructions.guiText.text;
 		instructions.guiText.text = "";
@@ -72,8 +72,11 @@ class Radio extends NPC {
 		//when the exit button is pressed, the window is destroyed.
 		if (GUI.Button (Rect (120, 400, 540, 50), "Exit", "button")) 
 		{
-			print ("you closed the window");
 			Destroy (this);
+			
+			var director = GameObject.FindWithTag("god");
+			director.GetComponent(Director).previous_level();
+
 		}
 
 	}

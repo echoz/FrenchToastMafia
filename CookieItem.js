@@ -1,6 +1,6 @@
 class CookieItem extends InventoryItem {
 
-	function Start() {
+	function Awake() {
 		worldName  = "Box of cookies";
 		description = "Girl scout mint chocolate chip cookies. Mmmmmmmmmmmm.";
 		quantity = 20;
@@ -13,7 +13,7 @@ class CookieItem extends InventoryItem {
 		quantity--;
 		GameObject.FindWithTag("GameController").GetComponent(Player).adjustHealth(5);
 	}
-	
+		
 	function activeWillUpdateFunction() {
 	}
 	function activeDidUpdateFunction() {

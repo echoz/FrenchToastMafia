@@ -1,6 +1,6 @@
 class FirstAidItem extends InventoryItem {
 
-	function Start() {
+	function Awake() {
 		worldName  = "First Aid Kit";
 		description = "Restores health. Has limited quantity of first aid patches.";
 		quantity = 10;
