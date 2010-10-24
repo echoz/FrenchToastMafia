@@ -3,12 +3,69 @@ class Backpack extends MonoBehaviour {
 	var items = new Array();
 	var ui : Texture2D;
 
-	var activeItem : InventoryItem;
-
+	var activeItem : Object;
+	
+	private var hasActiveItem : boolean = false;
 	private var collideItems = new Array();
+
+	// on going functions for items	
+	function callActiveWillUpdateFunction() {
+		if (hasActiveItem)
+			activeItem.activeWillUpdateFunction();	
+	}
+	
+	function callActiveDidUpdateFunction() {
+		if (hasActiveItem)
+			activeItem.activeDidUpdateFunction();	
+	}
+	
+	function callActiveWillGUIFunction() {
+		if (hasActiveItem)
+			activeItem.activeDidGUIFunction();			
+	}
+	
+	function callActiveDidGUIFunction() {
+		if (hasActiveItem)
+			activeItem.activeDidGUIFunction();	
+	}
+	
+	function callEquippedWillUpdateFunction() {
+		for (var item : Object in items) {
+			item.equippedWillUpdateFunction();	
+		}
+	}
+	
+	function callEquippedDidUpdateFunction() {
+		for (var item : Object in items) {
+			item.equippedDidUpdateFunction();
+		}
+	}
+	
+	function callEquippedWillGUIFunction() {
+		for (var item : Object in items) {
+			item.equippedDidGUIFunction();			
+		}
+	}
+	
+	function callEquippedDidGUIFunction() {
+		for (var item : Object in items) {
+			item.equippedDidGUIFunction();	
+		}
+	}
+	
+	function callPerformFunction() {
+		if (hasActiveItem) {
+			activeItem.performFunction();	
+		}
+	}
+	
 
 	// gui
 	function OnGUI() {
+		callActiveWillGUIFunction();
+		callEquippedWillGUIFunction();
+		
+		
 		var activeHeight : float = 64.0;
 		var activeWidth : float = 64.0;
 		var normalHeight : float = 48.0;
@@ -28,9 +85,9 @@ class Backpack extends MonoBehaviour {
 			
 			for (var item : InventoryItem in items) {
 				if (item !== activeItem) {
-					GUI.Box(new Rect((screenLeftPadding + activeWidth) + (i * normalWidth) + gap, Screen.height - screenBottomPadding - normalHeight, normalWidth, normalHeight), item.worldName);
+					GUI.Box(new Rect((screenLeftPadding + activeWidth) + (i * normalWidth) + i+1 * gap, Screen.height - screenBottomPadding - normalHeight, normalWidth, normalHeight), item.worldName);
 					if (item.consummable) {
-						GUI.Label(new Rect((screenLeftPadding + activeWidth) + (i * normalWidth) + gap + 5, Screen.height - screenBottomPadding - 20.0, normalWidth - 5, 25.0), "" + item.quantity);
+						GUI.Label(new Rect((screenLeftPadding + activeWidth) + (i * normalWidth) + i * gap + 5, Screen.height - screenBottomPadding - 20.0, normalWidth - 5, 25.0), "" + item.quantity);
 					}
 					i++;
 				}
@@ -41,13 +98,22 @@ class Backpack extends MonoBehaviour {
 			
 		}
 		
+		callActiveDidGUIFunction();
+		callEquippedDidGUIFunction();		
+		
 	}
 	
 	// detect objects
 	function Update() {
+		callActiveWillUpdateFunction();
+		callEquippedWillUpdateFunction();		
+		
 		var idx;
 		
-		if (Input.GetKeyUp("e") && (collideItems.length > 0)) {
+		if (Input.GetMouseButtonUp(0)) {
+			callPerformFunction();	
+			clearConsummable();
+		} else if (Input.GetKeyUp("e") && (collideItems.length > 0)) {
 			for (var item : InventoryItem in collideItems) {
 				if (addItem(item)) {
 					Destroy(item.gameObject);
@@ -57,14 +123,21 @@ class Backpack extends MonoBehaviour {
 		} else if (Input.GetKeyUp("g") && (items.length > 0)) {
 			Instantiate(Resources.Load("ItemsPrefab/" + activeItem.prefabName), transform.position, Quaternion.identity);
 			removeItem(activeItem);
+			activeItem = items[0];
 		}
 		
-		if (Input.GetAxis("Mouse ScrollWheel") > 0) {
+		if (items.length == 1) {
+			activeItem = items[0];
+			hasActiveItem = true;
+		} else if (items.length == 0) {
+			activeItem = null;
+			hasActiveItem = false;
+		}
+		
+		if ((Input.GetAxis("Mouse ScrollWheel") > 0) || (Input.GetKeyUp("q"))) {
 			// scroll down
-			Debug.Log("Scrolldown");
-			
 			idx = indexOfItem(activeItem, items);
-			if (idx == items.length) {
+			if (idx == items.length-1) {
 				activeItem = items[0];	
 			} else {
 				activeItem = items[++idx];
@@ -73,20 +146,18 @@ class Backpack extends MonoBehaviour {
 			
 		} else if (Input.GetAxis("Mouse ScrollWheel") < 0) {
 			// scroll up
-			Debug.Log("Scrollup");
 			idx = indexOfItem(activeItem, items);
 			if (idx == 0) {
-				activeItem = items[items.length];	
+				activeItem = items[items.length-1];	
 			} else {
 				activeItem = items[--idx];
 			}
 			
 		}
 
+		callActiveDidUpdateFunction();
+		callEquippedDidUpdateFunction();		
 		
-		if (items.length == 1) {
-			activeItem = items[0];	
-		}
 	}
 	
 	function notification(who : Object, msg : String, userInfo : Object) {
@@ -98,6 +169,25 @@ class Backpack extends MonoBehaviour {
 	}
 	
 	// hardcore functions
+	function clearConsummable() {
+		
+		var toremove = new Array();
+		for (var i=0;i<items.length;i++) {
+			if ((items[i].consummable) && (items[i].quantity == 0)) {
+				toremove.Add(i);
+			}	
+		}
+		if (toremove.length > 0) {
+			for (var i : int in toremove) {
+				items.RemoveAt(i);	
+			}
+			if (items.length > 0) {
+				activeItem = items[0];
+			}
+		}
+	}
+	
+	
 	function currentCapacity() {
 		var currcapc = 0;
 		for (var i=0;i<items.length;i++) {
@@ -109,6 +199,7 @@ class Backpack extends MonoBehaviour {
 	
 	function indexOfItem(item : Object, items : Array) {
 		for (var i=0;i<items.length;i++) {
+//			Debug.Log(items[i] + " === " + item + " : " + (items[i]===item) + " = " + i);
 			if (items[i] === item) {
 				return i;	
 			}	
