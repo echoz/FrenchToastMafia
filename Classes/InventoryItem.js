@@ -7,7 +7,45 @@ class InventoryItem extends WorldObject {
 	
 	private var showWindow : boolean = false;
 	private var thePlayer : GameObject;
-			
+	
+	// activeWillUpdateFunction = once activeItem, on going function in Update() before main body of code
+	// equippedWIllUpdateFunction = when in inventory function works in Update() before main body of code
+	// activeWillGUIFunction = once activeItem on going function in GUI() before main body of code
+	// equippedWillGUIFunction = when in inventory function works in GUI() before main body of code
+	// activeDidUpdateFunction = once activeItem, on going function in Update() after main body of code
+	// equippedDidUpdateFunction = when in inventory function works in Update() after main body of code
+	// activeDidGUIFunction = once activeItem on going function in GUI() after main body of code
+	// equippedDidGUIFunction = when in inventory function works in GUI() after main body of code
+	// performFunction = only on mouse click for active item
+	
+	function activeWillUpdateFunction() {
+		Debug.Log("Please Override activeWillUpdateFunction");
+	}
+	function activeDidUpdateFunction() {
+		Debug.Log("Please Override activeDidUpdateFunction");
+	}
+	function activeWillGUIFunction() {
+		Debug.Log("Please Override activeWillGUIFunction");
+	}
+	function activeDidGUIFunction() {
+		Debug.Log("Please Override activeDidGUIFunction");
+	}
+	function equippedWillUpdateFunction() {
+		Debug.Log("Please Override equippedWillUpdateFunction");
+	}
+	function equippedDidUpdateFunction() {
+		Debug.Log("Please Override equippedDidUpdateFunction");
+	}
+	function equippedWillGUIFunction() {
+		Debug.Log("Please Override equippedWillGUIFunction");
+	}
+	function equippedDidGUIFunction() {
+		Debug.Log("Please Override equippedDidGUIFunction");
+	}
+	function performFunction() {
+		Debug.Log("Please Override performFunction");
+	}
+
 	function checkCollision(who : GameObject) {
 		return (who == thePlayer);
 	}
