@@ -3,10 +3,11 @@ class InventoryItem extends WorldObject {
 	var quantity : int;
 	var unitSpaceRequired: int;
 	var consummable : boolean;
+	var prefabName : String;
 	
 	private var showWindow : boolean = false;
 	private var thePlayer : GameObject;
-		
+			
 	function checkCollision(who : GameObject) {
 		return (who == thePlayer);
 	}

@@ -55,6 +55,7 @@ class Backpack extends MonoBehaviour {
 			}
 			collideItems.clear();
 		} else if (Input.GetKeyUp("g") && (items.length > 0)) {
+			Instantiate(Resources.Load("ItemsPrefab/" + activeItem.prefabName), transform.position, Quaternion.identity);
 			removeItem(activeItem);
 		}
 		

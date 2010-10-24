@@ -6,6 +6,7 @@ class RadioItem extends InventoryItem {
 		quantity = 1;
 		unitSpaceRequired = 1;
 		conssumable = false;
+		prefabName = "Radio";
 	}
 
 	function Update() {

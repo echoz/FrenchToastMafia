@@ -6,6 +6,7 @@ class GPSItem extends InventoryItem {
 		quantity = 1;
 		unitSpaceRequired = 1;
 		conssumable = false;
+		prefabName = "GPS";
 	}
 
 	function Update() {
