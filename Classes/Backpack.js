@@ -1,9 +1,8 @@
 class Backpack extends MonoBehaviour {
 	var maxCapacity : int = 100;
 	var items = new Array();
-	var ui : Texture2D;
-
-	var activeItem : Object;
+	var activeItem : Object;	
+	var developer : boolean;
 	
 	private var hasActiveItem : boolean = false;
 	private var collideItems = new Array();
@@ -58,13 +57,15 @@ class Backpack extends MonoBehaviour {
 			activeItem.performFunction();	
 		}
 	}
-	
 
 	// gui
 	function OnGUI() {
 		callActiveWillGUIFunction();
 		callEquippedWillGUIFunction();
 		
+		if (developer) {
+			GUI.Box(new Rect(200,200,200,100), "Item count: " + items.length + "\nCollide Item Count: " + collideItems.length + "\nCurrent capacity: " + currentCapacity() + "/" + maxCapacity);
+		}
 		
 		var activeHeight : float = 64.0;
 		var activeWidth : float = 64.0;
@@ -114,16 +115,25 @@ class Backpack extends MonoBehaviour {
 			callPerformFunction();	
 			clearConsummable();
 		} else if (Input.GetKeyUp("e") && (collideItems.length > 0)) {
+			var previousItemsCount = items.length;
+			
 			for (var item : InventoryItem in collideItems) {
 				if (addItem(item)) {
 					Destroy(item.gameObject);
 				}
 			}
 			collideItems.clear();
+			
+			if (previousItemsCount == 0) {
+				activeItem = items[0];	
+			}
+			
 		} else if (Input.GetKeyUp("g") && (items.length > 0)) {
 			Instantiate(Resources.Load("ItemsPrefab/" + activeItem.prefabName), transform.position, Quaternion.identity);
 			removeItem(activeItem);
-			activeItem = items[0];
+			if (items.length > 0) {
+				activeItem = items[0];
+			}
 		}
 		
 		if (items.length == 1) {
