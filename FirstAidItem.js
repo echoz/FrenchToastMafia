@@ -11,7 +11,7 @@ class FirstAidItem extends InventoryItem {
 
 	function performFunction() {
 		quantity--;
-		GameObject.FindWithTag("GameController").GetComponent(Player).adjustHealth(10);
+		GameObject.FindWithTag("GameController").GetComponent(Player).adjustHealth(50);
 	}
 	
 	function activeWillUpdateFunction() {
