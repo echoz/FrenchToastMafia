@@ -3,8 +3,8 @@ class Backpack extends MonoBehaviour {
 	var items = new Array();
 	var activeItem : Object;	
 	var developer : boolean;
+	var hasActiveItem : boolean = false;
 	
-	private var hasActiveItem : boolean = false;
 	private var collideItems = new Array();
 
 	// on going functions for items	
@@ -57,6 +57,25 @@ class Backpack extends MonoBehaviour {
 			activeItem.performFunction();	
 		}
 	}
+	
+	function cullEquippedItems() {
+		var itemsInGame = GameObject.FindGameObjectsWithTag("items");
+		var components = new Array();
+		
+		for (var gameobj : GameObject in itemsInGame) {
+			var minorcomp = gameobj.GetComponents(InventoryItem);
+			components = components.Concat(minorcomp);
+		}
+		for (var item in items) {
+			if (!item.consummable) {
+				for (var comp in components) {
+					if (item.GetType() == comp.GetType()) {
+						Destroy(comp.gameObject);	
+					}
+				}	
+			}
+		}
+	}
 
 	// gui
 	function OnGUI() {
@@ -83,7 +102,7 @@ class Backpack extends MonoBehaviour {
 				GUI.Label(new Rect(screenLeftPadding + 5, Screen.height - screenBottomPadding - 20.0, activeWidth - 5, 25.0), "" + activeItem.quantity);
 			
 			var i = 0;
-			
+						
 			for (var item : InventoryItem in items) {
 				if (item !== activeItem) {
 					GUI.Box(new Rect((screenLeftPadding + activeWidth) + (i * normalWidth) + i+1 * gap, Screen.height - screenBottomPadding - normalHeight, normalWidth, normalHeight), item.worldName);
@@ -129,7 +148,9 @@ class Backpack extends MonoBehaviour {
 			}
 			
 		} else if (Input.GetKeyUp("g") && (items.length > 0)) {
-			Instantiate(Resources.Load("ItemsPrefab/" + activeItem.prefabName), transform.position, Quaternion.identity);
+			var thrownItem = Instantiate(Resources.Load("ItemsPrefab/" + activeItem.prefabName), transform.position, Quaternion.identity);
+			thrownItem.GetComponent(InventoryItem).quantity = activeItem.quantity;
+			
 			removeItem(activeItem);
 			if (items.length > 0) {
 				activeItem = items[0];
