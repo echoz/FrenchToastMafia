@@ -26,5 +26,7 @@ class RadioItem extends InventoryItem {
 	function equippedDidGUIFunction() {
 	}
 	function performFunction() {
+		var director = GameObject.FindWithTag("god");
+		director.GetComponent(Director).load_level("radio_scene");
 	}
 }

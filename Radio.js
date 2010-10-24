@@ -60,7 +60,6 @@ class Radio extends NPC {
 			// display correct code stuff
 			var windowRect : Rect = new Rect(Screen.width/2 - 400, Screen.height/2 - 300, 800, 500);
 			if (CODE == CORRECT_CODE) {
-				Debug.Log("WHEEE");
 				GUI.Window(0,windowRect, WindowFunction, "");
 			}
 		}
