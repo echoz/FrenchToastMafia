@@ -1,12 +1,12 @@
-class RadioItem extends InventoryItem {
+class RopeItem extends InventoryItem {
 
 	function Start() {
-		worldName  = "Amateur Radio";
-		description = "Push to talk functionality for sending and receiving of radio communications. Has the ability to send morse code as well.";
+		worldName  = "Rope";
+		description = "Useful for tying shit up.";
 		quantity = 1;
 		unitSpaceRequired = 1;
 		consummable = false;
-		prefabName = "Radio";
+		prefabName = "Rope";
 	}
 
 	function activeWillUpdateFunction() {
@@ -27,4 +27,5 @@ class RadioItem extends InventoryItem {
 	}
 	function performFunction() {
 	}
+	
 }

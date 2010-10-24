@@ -5,11 +5,27 @@ class GPSItem extends InventoryItem {
 		description = "Global Positioning enabled mapping device";
 		quantity = 1;
 		unitSpaceRequired = 1;
-		conssumable = false;
+		consummable = false;
 		prefabName = "GPS";
 	}
 
-	function Update() {
-		
+	function activeWillUpdateFunction() {
 	}
+	function activeDidUpdateFunction() {
+	}
+	function activeWillGUIFunction() {
+	}
+	function activeDidGUIFunction() {
+	}
+	function equippedWillUpdateFunction() {
+	}
+	function equippedDidUpdateFunction() {
+	}
+	function equippedWillGUIFunction() {
+	}
+	function equippedDidGUIFunction() {
+	}
+	function performFunction() {
+	}
+	
 }
