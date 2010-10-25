@@ -10,6 +10,10 @@ class Director extends MonoBehaviour {
 	private var thePlayer : GameObject;
 	private var gameController : GameObject;
 	
+	private var score : int;
+	private var subtitles = new Array();
+	private var lastShownSubtitleTime : float;
+	
 	// state
 	private var backpack_items = new Array();
 	private var backpack_activeItem : int;
@@ -95,8 +99,33 @@ class Director extends MonoBehaviour {
 	}
 	
 	// script run
+	function addSubtitle(subtitle : Subtitle) {
+		subtitles.Add(subtitle);
+		if (lastShownSubtitleTime == 0) {
+			lastShownSubtitleTime = Time.realtimeSinceStartup;	
+		}
+	}
+	
 	function OnGUI() {
+		var subtitleLeftPadding : float = 100.0;
+		var subtitleRightPadding: float = 100.0;
+		var subtitleHeight : float = 100.0;
+		
+		// time remaining
 		GUI.Box(new Rect(Screen.width - 10 - 100, 10, 100, 20), remainingTimeString() + " left");
+		
+		// subtitle system
+		if (subtitles.length > 0) {
+			if ((Time.realtimeSinceStartup - lastShownSubtitleTime) <= subtitles[0].displayTime) {
+				GUI.Label(new Rect(Screen.width + subtitleLeftPadding, (Screen.height + subtitleHeight)/2, Screen.width - subtitleLeftPadding - subtitleRightPadding ,subtitleHeight), subtitles[0].content);
+			} else {
+				subtitles.RemoveAt(0);
+				lastShownSubtitleTime = Time.realtimeSinceStartup;	
+				if (subtitles.length == 0) {
+					lastShownSubtitleTime = 0.0;	
+				}
+			}
+		}
 		
 	}
 	
