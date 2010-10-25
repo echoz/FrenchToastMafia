@@ -5,6 +5,9 @@ class InventoryItem extends WorldObject {
 	var consummable : boolean;
 	var prefabName : String;
 	
+	var icon_small : Texture;
+	var icon_large : Texture;
+	
 	private var showWindow : boolean = false;
 	private var thePlayer : GameObject;
 	
