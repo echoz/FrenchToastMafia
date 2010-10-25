@@ -96,8 +96,12 @@ class Backpack extends MonoBehaviour {
 				
 		if (items.length > 0) {
 			// do complex gui drawing
-
-			GUI.Box(new Rect(screenLeftPadding, Screen.height - screenBottomPadding - activeHeight, activeWidth, activeHeight), activeItem.worldName);
+			if (activeItem.icon_large) {
+				GUI.Box(new Rect(screenLeftPadding, Screen.height - screenBottomPadding - activeHeight, activeWidth, activeHeight), activeItem.icon_large);	
+			} else {
+				GUI.Box(new Rect(screenLeftPadding, Screen.height - screenBottomPadding - activeHeight, activeWidth, activeHeight), activeItem.worldName);
+			}
+			
 			if (activeItem.consummable)
 				GUI.Label(new Rect(screenLeftPadding + 5, Screen.height - screenBottomPadding - 20.0, activeWidth - 5, 25.0), "" + activeItem.quantity);
 			
@@ -105,7 +109,11 @@ class Backpack extends MonoBehaviour {
 						
 			for (var item : InventoryItem in items) {
 				if (item !== activeItem) {
-					GUI.Box(new Rect((screenLeftPadding + activeWidth) + (i * normalWidth) + i+1 * gap, Screen.height - screenBottomPadding - normalHeight, normalWidth, normalHeight), item.worldName);
+					if (item.icon_small) {
+						GUI.Box(new Rect((screenLeftPadding + activeWidth) + (i * normalWidth) + i+1 * gap, Screen.height - screenBottomPadding - normalHeight, normalWidth, normalHeight), item.icon_small);
+					} else {
+						GUI.Box(new Rect((screenLeftPadding + activeWidth) + (i * normalWidth) + i+1 * gap, Screen.height - screenBottomPadding - normalHeight, normalWidth, normalHeight), item.worldName);						
+					}
 					if (item.consummable) {
 						GUI.Label(new Rect((screenLeftPadding + activeWidth) + (i * normalWidth) + i * gap + 5, Screen.height - screenBottomPadding - 20.0, normalWidth - 5, 25.0), "" + item.quantity);
 					}
