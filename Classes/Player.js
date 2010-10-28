@@ -25,14 +25,14 @@ class Player extends WorldObject {
 	}
 		
 	function affectedByWater(waterLevel : int, playerCamera : GameObject) {
-		if (waterLevel > playerCamera.transform.position.y) {
+		if (waterLevel >= playerCamera.transform.position.y) {
 			
 			if ((Time.realtimeSinceStartup - lastUpdateHealth) > healthSubtractInterval) {
 				lastUpdateHealth = Time.realtimeSinceStartup;
 				adjustHealth(healthSubtractDelta);				
 			}
 			
-			if ((Time.realtimeSinceStartup - lastPlayedAudio) > 3) {
+			if ((Time.realtimeSinceStartup - lastPlayedAudio) > 1) {
 				playerCamera.audio.PlayOneShot(drowningAudio);
 				lastPlayedAudio = Time.realtimeSinceStartup;
 			}
