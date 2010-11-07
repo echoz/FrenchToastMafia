@@ -7,6 +7,7 @@ class UmbrellaItem extends InventoryItem {
 		unitSpaceRequired = 1;
 		consummable = false;
 		prefabName = "Umbrella";
+		className = "UmbrellaItem";
 	}
 
 	function activeWillUpdateFunction() {

@@ -27,6 +27,7 @@ class GPSItem extends InventoryItem {
 		unitSpaceRequired = 1;
 		consummable = false;
 		prefabName = "GPS";
+		className = "GPSItem";
 	}
 
 	function Start() 

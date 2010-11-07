@@ -9,6 +9,7 @@ class CarKeyItem extends InventoryItem {
 		unitSpaceRequired = 1;
 		consummable = false;
 		prefabName = "CarKey";
+		className = "CarKeyItem";
 	}
 
 	function activeWillUpdateFunction() {
@@ -29,7 +30,7 @@ class CarKeyItem extends InventoryItem {
 	}
 	function performFunction() {
 		findProps();
-		theDirector.addSubtitle(new Subtitle("Keys can only work with your car", 2));
+		theDirector.addSubtitle(new Subtitle("I'm pretty sure this keys only work with my car...", 2));
 	}
 	function willThrowItem() {
 	}

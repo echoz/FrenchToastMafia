@@ -280,14 +280,30 @@ class Backpack extends MonoBehaviour {
 		return currcapc;
 	}
 	
-	function indexOfItem(item : Object, items : Array) {
+	function indexOfItem(item, items : Array) {
 		for (var i=0;i<items.length;i++) {
-//			Debug.Log(items[i] + " === " + item + " : " + (items[i]===item) + " = " + i);
+//			Debug.Log(items[i] + " === " + item + " : " + (items[i]===item) + ", " + items[i] + " == " + item + " : " + (items[i]==item) + " = " + i);
 			if (items[i] === item) {
 				return i;	
 			}	
 		}
 		return -1;
+	}
+	
+	function hasItem(item) {
+		if (indexOfItem(item, items) < 0) {
+			return false;	
+		} else {
+			return true;
+		}
+	}
+	
+	function hasItemOfType(item) {
+		for (itm in items) {
+			if (itm.className == item)
+				return true;	
+		}
+		return false;
 	}
 	
 	function addItem(item : InventoryItem) {

@@ -7,6 +7,7 @@ class RopeItem extends InventoryItem {
 		unitSpaceRequired = 1;
 		consummable = false;
 		prefabName = "Rope";
+		className = "RopeItem";	
 	}
 
 	function activeWillUpdateFunction() {

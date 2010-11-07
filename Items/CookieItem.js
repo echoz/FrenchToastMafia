@@ -7,6 +7,7 @@ class CookieItem extends InventoryItem {
 		unitSpaceRequired = 1;
 		consummable = true;
 		prefabName = "Cookie";
+		className = "CookieItem";
 	}
 
 	function performFunction() {

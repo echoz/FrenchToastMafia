@@ -10,6 +10,7 @@ class FlashlightItem extends InventoryItem {
 		unitSpaceRequired = 1;
 		consummable = false;
 		prefabName = "Flashlight";
+		className = "FlashlightItem";
 	}
 
 	function activeWillUpdateFunction() {

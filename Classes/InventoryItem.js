@@ -4,6 +4,7 @@ class InventoryItem extends WorldObject {
 	var unitSpaceRequired: int;
 	var consummable : boolean;
 	var prefabName : String;
+	var className : String;
 	
 	var icon_small : Texture;
 	var icon_large : Texture;

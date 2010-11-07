@@ -11,6 +11,7 @@ class RadioItem extends InventoryItem {
 		unitSpaceRequired = 1;
 		consummable = false;
 		prefabName = "Radio";
+		className = "RadioItem";		
 	}
 
 	function activeWillUpdateFunction() {
@@ -54,6 +55,9 @@ class RadioItem extends InventoryItem {
 	function willThrowItem() {
 	}
 	function didThrowItem() {
+	}
+	function findProps() {
+		director = GameObject.FindWithTag("god").GetComponent(Director);	
 	}
 
 }

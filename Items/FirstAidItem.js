@@ -7,6 +7,7 @@ class FirstAidItem extends InventoryItem {
 		unitSpaceRequired = 1;
 		consummable = true;
 		prefabName = "FirstAid";
+		className = "FirstAidItem";
 	}
 
 	function performFunction() {
