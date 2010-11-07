@@ -194,6 +194,8 @@ class Backpack extends MonoBehaviour {
 			var thrownItem = Instantiate(Resources.Load("ItemsPrefab/" + activeItem.prefabName), transform.position, Quaternion.identity);
 			thrownItem.GetComponent(InventoryItem).quantity = activeItem.quantity;
 			
+			theDirector.addSubtitle(new Subtitle("Dropped " + activeItem.worldName, 2));
+			
 			callDidThrowItem();			
 			
 			removeItem(activeItem);
