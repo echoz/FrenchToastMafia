@@ -117,7 +117,7 @@ class GPSItem extends InventoryItem {
 		var posY : float = (Screen.height - displayHeight - screenTopPadding - (internalPadding * 2)) / Screen.height;
 		var camWidth : float = (displayWidth / Screen.width);
 		var camHeight : float = (displayHeight / Screen.height);
-		Debug.Log(posY);
+
 		theCamera.camera.rect = new Rect(posX,posY,camWidth,camHeight);
 
 	}
