@@ -30,5 +30,9 @@ class CookieItem extends InventoryItem {
 	}
 	function equippedDidGUIFunction() {
 	}
+	function willThrowItem() {
+	}
+	function didThrowItem() {
+	}
 
 }

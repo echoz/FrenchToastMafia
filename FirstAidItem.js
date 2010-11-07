@@ -30,5 +30,9 @@ class FirstAidItem extends InventoryItem {
 	}
 	function equippedDidGUIFunction() {
 	}
+	function willThrowItem() {
+	}
+	function didThrowItem() {
+	}
 
 }
