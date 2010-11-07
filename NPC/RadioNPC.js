@@ -1,4 +1,4 @@
-class Radio extends NPC {
+class RadioNPC extends NPC {
 	
 	var screen : GameObject;
 	var led : GameObject;

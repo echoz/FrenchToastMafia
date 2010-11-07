@@ -124,7 +124,7 @@ class Director extends MonoBehaviour {
 		var subtitleHeight : float = 100.0;
 		
 		// time remaining
-		GUI.Box(new Rect(Screen.width - 10 - 100, 10, 100, 20), remainingTimeString() + " left");
+		GUI.Box(new Rect(Screen.width - 10 - 202, 10, 202, 20), remainingTimeString() + " until full flood");
 		
 		// subtitle system
 		if (subtitles.length > 0) {
