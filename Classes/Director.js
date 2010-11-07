@@ -120,8 +120,7 @@ class Director extends MonoBehaviour {
 		// subtitle system
 		if (subtitles.length > 0) {
 			if ((Time.realtimeSinceStartup - lastShownSubtitleTime) <= subtitles[0].displayTime) {
-
-				GUI.Label(Rect(subtitleLeftPadding, (Screen.height + subtitleHeight)/2, Screen.width - subtitleLeftPadding - subtitleRightPadding ,subtitleHeight), subtitles[0].content, subtitleStyle);
+				GUI.Label(new Rect(Screen.width + subtitleLeftPadding, (Screen.height + subtitleHeight)/2, Screen.width - subtitleLeftPadding - subtitleRightPadding ,subtitleHeight), subtitles[0].content);
 			} else {
 				subtitles.RemoveAt(0);
 				lastShownSubtitleTime = Time.realtimeSinceStartup;	
