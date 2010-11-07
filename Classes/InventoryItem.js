@@ -48,6 +48,15 @@ class InventoryItem extends WorldObject {
 	function performFunction() {
 		Debug.Log("Please Override performFunction");
 	}
+	function willThrowItem() {
+		Debug.Log("Please Override willThrowItem");
+	}
+	function didThrowItem() {
+		Debug.Log("Please Override didThrowItem");
+	}
+	function wake() {
+		Debug.Log("Please override wake to let item know its awoken from restore");
+	}
 
 	function checkCollision(who : GameObject) {
 		return (who == thePlayer);

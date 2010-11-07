@@ -27,5 +27,9 @@ class RopeItem extends InventoryItem {
 	}
 	function performFunction() {
 	}
+	function willThrowItem() {
+	}
+	function didThrowItem() {
+	}
 	
 }
