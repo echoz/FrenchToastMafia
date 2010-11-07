@@ -6,6 +6,7 @@ class Backpack extends MonoBehaviour {
 	var hasActiveItem : boolean = false;
 	
 	private var collideItems = new Array();
+	private var theDirector : Director;
 
 	// on going functions for items	
 	function callActiveWillUpdateFunction() {
@@ -58,6 +59,24 @@ class Backpack extends MonoBehaviour {
 		}
 	}
 	
+	function callWillThrowItem() {
+		if (hasActiveItem)
+			activeItem.willThrowItem();	
+	}
+	
+
+	function callDidThrowItem() {
+		if (hasActiveItem)
+			activeItem.didThrowItem();	
+	}
+	
+	function callWakeItems() {
+		for (var item : Object in items) {
+			item.wake();;	
+		}
+	}
+
+
 	function cullEquippedItems() {
 		var itemsInGame = GameObject.FindGameObjectsWithTag("items");
 		var components = new Array();
@@ -75,6 +94,10 @@ class Backpack extends MonoBehaviour {
 				}	
 			}
 		}
+	}
+	
+	function wakeItems() {
+		callWakeItems();	
 	}
 
 	// gui
@@ -143,21 +166,35 @@ class Backpack extends MonoBehaviour {
 			clearConsummable();
 		} else if (Input.GetKeyUp("e") && (collideItems.length > 0)) {
 			var previousItemsCount = items.length;
+			var tempArr = new Array();
+			var itemsPicked = new Array();
 			
 			for (var item : InventoryItem in collideItems) {
 				if (addItem(item)) {
+					itemsPicked.Add(item.worldName);
 					Destroy(item.gameObject);
+				} else {
+					tempArr.Add(item);
 				}
 			}
-			collideItems.clear();
+			
+			collideItems.Clear();
+			collideItems.Concat(tempArr);
+			
+			findProps();
+			theDirector.addSubtitle(new Subtitle("Picked up " + itemsPicked, 2));
 			
 			if (previousItemsCount == 0) {
 				activeItem = items[0];	
 			}
 			
 		} else if (Input.GetKeyUp("g") && (items.length > 0)) {
+			callWillThrowItem();
+			
 			var thrownItem = Instantiate(Resources.Load("ItemsPrefab/" + activeItem.prefabName), transform.position, Quaternion.identity);
 			thrownItem.GetComponent(InventoryItem).quantity = activeItem.quantity;
+			
+			callDidThrowItem();			
 			
 			removeItem(activeItem);
 			if (items.length > 0) {
@@ -199,11 +236,16 @@ class Backpack extends MonoBehaviour {
 		
 	}
 	
+	function findProps() {
+		theDirector = GameObject.FindWithTag("god").GetComponent(Director);
+	}
+	
 	function notification(who : Object, msg : String, userInfo : Object) {
 		if (msg == "InItemSpace") {
 			collideItems.Add(who);	
 		} else if (msg == "OutItemSpace") {
-			collideItems.RemoveAt(indexOfItem(who, collideItems));
+			if (indexOfItem(who, collideItems) >= 0)
+				collideItems.RemoveAt(indexOfItem(who, collideItems));
 		}
 	}
 	
