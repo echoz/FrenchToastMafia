@@ -14,8 +14,11 @@ class GPSItem extends InventoryItem {
 	private var theCamera : GameObject;
 	private var theDirector : Director;
 	private var height = 30;
-	private var paddingLeft : float = 10.0; //pixels
-	private var paddingTop : float = 40.0;
+	
+	private var screenRightPadding : float = 10.0;
+	private var screenTopPadding : float = 35.0;
+	private var internalPadding : float = 1.0;
+
 	
 	function Awake() {
 		worldName  = "GPS";
@@ -42,7 +45,7 @@ class GPSItem extends InventoryItem {
 	}
 	function activeDidUpdateFunction() {
 	}
-	function activeWillGUIFunction() {
+	function activeWillGUIFunction() {	
 	}
 	function activeDidGUIFunction() {
 	}
@@ -95,6 +98,9 @@ class GPSItem extends InventoryItem {
 	function equippedDidUpdateFunction() {
 	}
 	function equippedWillGUIFunction() {
+		if (switchedOn) {
+			GUI.Box(new Rect(Screen.width - screenRightPadding - displayWidth - (internalPadding * 2), screenTopPadding + internalPadding, displayWidth + (internalPadding * 2), displayHeight + (internalPadding *2)), "Map");
+		}		
 	}
 	function equippedDidGUIFunction() {
 	}
@@ -107,11 +113,11 @@ class GPSItem extends InventoryItem {
 
 		theCamera.GetComponent(Camera).enabled = switchedOn;
 		
-		var posX : float = (Screen.width - displayWidth - paddingLeft) / Screen.width;
-		var posY : float = (Screen.height - displayHeight - paddingTop) / Screen.height;
+		var posX : float = (Screen.width - displayWidth - screenRightPadding - internalPadding) / Screen.width;
+		var posY : float = (Screen.height - displayHeight - screenTopPadding - (internalPadding * 2)) / Screen.height;
 		var camWidth : float = (displayWidth / Screen.width);
 		var camHeight : float = (displayHeight / Screen.height);
-		
+		Debug.Log(posY);
 		theCamera.camera.rect = new Rect(posX,posY,camWidth,camHeight);
 
 	}
