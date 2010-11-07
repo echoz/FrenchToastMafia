@@ -1,5 +1,9 @@
 class RadioItem extends InventoryItem {
 
+	var switchedOn : boolean = false;
+	var sosSent : boolean = false;
+	private var director : Director;
+
 	function Awake() {
 		worldName  = "Amateur Radio";
 		description = "Push to talk functionality for sending and receiving of radio communications. Has the ability to send morse code as well.";
@@ -18,6 +22,11 @@ class RadioItem extends InventoryItem {
 	function activeDidGUIFunction() {
 	}
 	function equippedWillUpdateFunction() {
+		if (switchedOn) {
+			// radio messages	
+			
+		}
+		
 	}
 	function equippedDidUpdateFunction() {
 	}
@@ -25,13 +34,29 @@ class RadioItem extends InventoryItem {
 	}
 	function equippedDidGUIFunction() {
 	}
+	
+	function wake() {
+		findProps();
+		if (director.globalState.Contains("sosSent")) {
+			sosSent = director.globalState["sosSent"];
+		}		
+	}
+	
 	function performFunction() {
-		var director = GameObject.FindWithTag("god");
-		director.GetComponent(Director).load_level("radio_scene");
+		if (sosSent) {
+			switchedOn = !switchedOn;
+			director.addSubtitle(new Subtitle("Radio switched " + ((switchedOn)?"on":"off") + "", 2));	
+		} else {
+			findProps();
+			director.load_level("radio_scene");
+		}
 	}
 	function willThrowItem() {
 	}
 	function didThrowItem() {
+	}
+	function findProps() {
+		director = GameObject.FindWithTag("god").GetComponent(Director);	
 	}
 
 }
