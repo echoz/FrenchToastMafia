@@ -5,7 +5,7 @@ class Director extends MonoBehaviour {
 	
 	var subtitleStyle = new GUIStyle();
 	
-	var globalState = new Hashtable();
+	static var globalState = new Hashtable();
 	
 	private var gameState : int = 0;
 	private var water : GameObject;
@@ -25,6 +25,9 @@ class Director extends MonoBehaviour {
 	private var player_rotation : Quaternion;
 	
 	private var previousLevelName : String;
+	
+	private var loadLevelTimeStamp : float;
+	private var timeSpentLoading: float = 0;
 	
 	function Start() {
 		this.findProps();
@@ -74,23 +77,29 @@ class Director extends MonoBehaviour {
 			gameController.transform.rotation = player_rotation;
 	
 		}
+		if ((Time.realtimeSinceStartup - loadLevelTimeStamp) > 0) {
+			timeSpentLoading += Time.realtimeSinceStartup - loadLevelTimeStamp;
+		}
 	}
 
 	
 	function load_level(level : String) {
 		saveState();
 		previousLevelName = Application.loadedLevelName;
+		loadLevelTimeStamp = Time.realtimeSinceStartup;
 		Application.LoadLevel(level);
 	}
 	
 	function previous_level() {
+		loadLevelTimeStamp = Time.realtimeSinceStartup;
 		Application.LoadLevel(previousLevelName);
 
 	}
 	
 	function Update() {
 		if (Input.GetKeyUp("p")) {
-			Debug.Log(backpack_items);	
+			Debug.Log(backpack_items);
+			Debug.Log(globalState);
 		}	
 	}
 	
@@ -142,7 +151,7 @@ class Director extends MonoBehaviour {
 	
 	// functions related to director
 	function remainingTime() {
-		return (timeLimit * 60) - Time.realtimeSinceStartup;
+		return (timeLimit * 60) + timeSpentLoading - Time.realtimeSinceStartup;
 	}
 	
 	function findProps() {
