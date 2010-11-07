@@ -300,8 +300,9 @@ class Backpack extends MonoBehaviour {
 	
 	function hasItemOfType(item) {
 		for (itm in items) {
-			if (itm.className == item)
+			if (itm.className == item) {
 				return true;	
+			}
 		}
 		return false;
 	}
