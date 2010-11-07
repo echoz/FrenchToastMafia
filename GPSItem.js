@@ -103,7 +103,7 @@ class GPSItem extends InventoryItem {
 		
 		switchedOn = !switchedOn;
 		
-		theDirector.addSubtitle(new Subtitle("GPS is " + ((switchedOn)?"on":"off") + "", 2));
+		theDirector.addSubtitle(new Subtitle("GPS switched " + ((switchedOn)?"on":"off") + "", 2));
 
 		theCamera.GetComponent(Camera).enabled = switchedOn;
 		
