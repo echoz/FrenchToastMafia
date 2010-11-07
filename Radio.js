@@ -74,8 +74,9 @@ class Radio extends NPC {
 		{
 			Destroy (this);
 			
-			var director = GameObject.FindWithTag("god");
-			director.GetComponent(Director).previous_level();
+			var director = GameObject.FindWithTag("god").GetComponent(Director);
+			director.globalState.Add("sosSent", true);
+			director.previous_level();
 
 		}
 
@@ -116,6 +117,9 @@ class Radio extends NPC {
 				if (on) {
 					on = false;
 					FREQ = 0.0;
+					var director = GameObject.FindWithTag("god").GetComponent(Director);
+					director.previous_level();
+						
 				}
 			} else if (Physics.Raycast(ray, hit) && hit.collider.name == "on_btn") {
 				if (!on)
