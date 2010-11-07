@@ -43,7 +43,7 @@ class Backpack extends MonoBehaviour {
 	
 	function callEquippedWillGUIFunction() {
 		for (var item : Object in items) {
-			item.equippedDidGUIFunction();			
+			item.equippedWillGUIFunction();			
 		}
 	}
 	
