@@ -10,6 +10,7 @@ class Player extends WorldObject {
 	private var healthBarLength : float;
 	private var lastUpdateHealth : float = 0;
 	private var lastPlayedAudio : float;
+	private var dead : boolean = false;
 	
 	function Awake() {
 		healthBarLength = Screen.width / 4;	
@@ -25,18 +26,20 @@ class Player extends WorldObject {
 	}
 		
 	function affectedByWater(waterLevel : int, playerCamera : GameObject) {
-		if (waterLevel >= playerCamera.transform.position.y) {
-			
-			if ((Time.realtimeSinceStartup - lastUpdateHealth) > healthSubtractInterval) {
-				lastUpdateHealth = Time.realtimeSinceStartup;
-				adjustHealth(healthSubtractDelta);				
-			}
-			
-			if ((Time.realtimeSinceStartup - lastPlayedAudio) > 1) {
-				playerCamera.audio.PlayOneShot(drowningAudio);
-				lastPlayedAudio = Time.realtimeSinceStartup;
-			}
-		} 
+		if (!dead) {
+			if (waterLevel >= playerCamera.transform.position.y) {
+				
+				if ((Time.realtimeSinceStartup - lastUpdateHealth) > healthSubtractInterval) {
+					lastUpdateHealth = Time.realtimeSinceStartup;
+					adjustHealth(healthSubtractDelta);				
+				}
+				
+				if ((Time.realtimeSinceStartup - lastPlayedAudio) > 1) {
+					playerCamera.audio.PlayOneShot(drowningAudio);
+					lastPlayedAudio = Time.realtimeSinceStartup;
+				}
+			} 
+		}
 	}
 	
 	function OnGUI() {
@@ -45,14 +48,30 @@ class Player extends WorldObject {
 	}	
 	
 	function adjustHealth(healthDelta : int) {
-		health += healthDelta;
+		if (!dead) {
 		
-		if (health < 0)
-			health = 0;
+			health += healthDelta;
 			
-		if (health > maxHealth)
-			health = maxHealth;
-			
-		healthBarLength = (Screen.width / 4) * (health / maxHealth);
+			if (health < 0) {
+				health = 0;
+				died();
+			}
+				
+			if (health > maxHealth)
+				health = maxHealth;
+				
+			healthBarLength = (Screen.width / 4) * (health / maxHealth);
+		}
+	}
+	
+	function died() {
+		dead = true;
+		
+		var thePlayer = GameObject.FindWithTag("GameController");
+		var theDirector = GameObject.FindWithTag("god").GetComponent(Director);
+		thePlayer.GetComponent(MouseLook).enabled = false;
+		thePlayer.GetComponent(FPSWalker).enabled = false;
+		theDirector.addSubtitle(new Subtitle("Player has died", 10000));
+		
 	}
 }
