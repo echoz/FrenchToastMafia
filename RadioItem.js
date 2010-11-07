@@ -55,8 +55,5 @@ class RadioItem extends InventoryItem {
 	}
 	function didThrowItem() {
 	}
-	function findProps() {
-		director = GameObject.FindWithTag("god").GetComponent(Director);	
-	}
 
 }
