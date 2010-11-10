@@ -1,0 +1,3 @@
+class LucyNPC extends NPC {
+	
+}
