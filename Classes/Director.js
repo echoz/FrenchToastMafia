@@ -29,11 +29,15 @@ class Director extends MonoBehaviour {
 	private var loadLevelTimeStamp : float;
 	private var timeSpentLoading: float = 0;
 	
+	public var timeCreated : float;
+	
 	function Start() {
 		this.findProps();
+		Screen.lockCursor = true;
 	}
 	
 	function Awake() {
+		this.timeCreated = Time.realtimeSinceStartup;
 		DontDestroyOnLoad(this);
 	}
 	
@@ -69,6 +73,7 @@ class Director extends MonoBehaviour {
 	// state
 	function OnLevelWasLoaded (level : int) {
 		findProps();
+		cullClones();
 		if ((gameController) && (hasState)) {
 			restoreState();	
 		}
@@ -80,8 +85,34 @@ class Director extends MonoBehaviour {
 		if ((Time.realtimeSinceStartup - loadLevelTimeStamp) > 0) {
 			timeSpentLoading += Time.realtimeSinceStartup - loadLevelTimeStamp;
 		}
+		if (level == 2) {
+			Screen.lockCursor = false;	
+		} else {
+			Screen.lockCursor = true;
+		}
 	}
+	
+	function cullClones() {
+		var directors = GameObject.FindGameObjectsWithTag("god");
+		if (directors.length > 1) {
+			var realDirector : GameObject = directors[0];
 
+			for (var d : GameObject in directors) {
+				Debug.Log(d.GetComponent(Director).timeCreated);
+				Debug.Log(realDirector.GetComponent(Director).timeCreated);				
+				if (d.GetComponent(Director).timeCreated < realDirector.GetComponent(Director).timeCreated) {
+					realDirector = d;	
+				}
+			}
+			
+			for (var d : GameObject in directors) {
+				if (d !== realDirector) {
+					Destroy(d);	
+				}	
+			}
+			
+		}
+	}
 	
 	function load_level(level : String) {
 		saveState();
