@@ -7,6 +7,12 @@ class Backpack extends MonoBehaviour {
 	
 	private var collideItems = new Array();
 	private var theDirector : Director;
+	
+	private var thrown : boolean = false;
+	private static var thrownItemPrefabName : String;
+	private static var thrownItemQuantity : int;
+ 	private static var thrownItemWorldName : String;
+ 	private static var thrownItem : Object;
 
 	// on going functions for items	
 	function callActiveWillUpdateFunction() {
@@ -161,6 +167,8 @@ class Backpack extends MonoBehaviour {
 		
 		var idx;
 		
+		findProps();
+		
 		if (Input.GetMouseButtonUp(0)) {
 			callPerformFunction();	
 			clearConsummable();
@@ -181,26 +189,42 @@ class Backpack extends MonoBehaviour {
 			collideItems.Clear();
 			collideItems.Concat(tempArr);
 			
-			findProps();
 			theDirector.addSubtitle(new Subtitle("Picked up " + itemsPicked, 2));
 			
 			if (previousItemsCount == 0) {
-				activeItem = items[0];	
+				activeItem = items[0];
+				hasActiveItem = true;
 			}
 			
 		} else if (Input.GetKeyUp("g") && (items.length > 0)) {
-			callWillThrowItem();
+			if (!thrown) {
+				
+				thrown = true;
+				callWillThrowItem();
+				
+				thrownItem = activeItem;
+				thrownItemPrefabName = thrownItem.prefabName;
+				thrownItemQuantity = thrownItem.quantity;
+				thrownItemWorldName = thrownItem.worldName;
+				
+				removeItem(activeItem);
+				callDidThrowItem();
 			
-			var thrownItem = Instantiate(Resources.Load("ItemsPrefab/" + activeItem.prefabName), transform.position, Quaternion.identity);
-			thrownItem.GetComponent(InventoryItem).quantity = activeItem.quantity;
-			
-			theDirector.addSubtitle(new Subtitle("Dropped " + activeItem.worldName, 2));
-			
-			callDidThrowItem();			
-			
-			removeItem(activeItem);
-			if (items.length > 0) {
-				activeItem = items[0];
+				thrown = false;
+
+				if (items.length > 0) {
+					activeItem = items[0];
+					hasActiveItem = true;
+				} else {
+					hasActiveItem = false;	
+				}
+								
+				var thrownItem = Instantiate(Resources.Load("ItemsPrefab/" + thrownItemPrefabName), transform.position, Quaternion.identity);
+				thrownItem.GetComponent(InventoryItem).quantity = thrownItemQuantity;
+				
+				if (thrownItemWorldName) {
+					theDirector.addSubtitle(new Subtitle("Dropped " + thrownItemWorldName, 2));
+				}
 			}
 		}
 		
@@ -280,7 +304,7 @@ class Backpack extends MonoBehaviour {
 		return currcapc;
 	}
 	
-	function indexOfItem(item, items : Array) {
+	function indexOfItem(item : Object, items : Array) {
 		for (var i=0;i<items.length;i++) {
 //			Debug.Log(items[i] + " === " + item + " : " + (items[i]===item) + ", " + items[i] + " == " + item + " : " + (items[i]==item) + " = " + i);
 			if (items[i] === item) {
@@ -323,7 +347,7 @@ class Backpack extends MonoBehaviour {
 	}
 	
 	function removeItem(item : InventoryItem) {
-		items.RemoveAt(this.indexOfItem(item, items));	
+		items.RemoveAt(this.indexOfItem(item, items));
 	}
 	
 	function removeItemAtIndex(idx : int) {
