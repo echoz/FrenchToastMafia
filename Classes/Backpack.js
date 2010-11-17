@@ -188,8 +188,9 @@ class Backpack extends MonoBehaviour {
 			
 			collideItems.Clear();
 			collideItems.Concat(tempArr);
-			
-			theDirector.addSubtitle(new Subtitle("Picked up " + itemsPicked, 2));
+			if (theDirector) {
+				theDirector.addSubtitle(new Subtitle("Picked up " + itemsPicked, 2));
+			}
 			
 			if (previousItemsCount == 0) {
 				activeItem = items[0];
@@ -223,7 +224,8 @@ class Backpack extends MonoBehaviour {
 				thrownItem.GetComponent(InventoryItem).quantity = thrownItemQuantity;
 				
 				if (thrownItemWorldName) {
-					theDirector.addSubtitle(new Subtitle("Dropped " + thrownItemWorldName, 2));
+					if (theDirector)
+						theDirector.addSubtitle(new Subtitle("Dropped " + thrownItemWorldName, 2));
 				}
 			}
 		}
@@ -263,7 +265,9 @@ class Backpack extends MonoBehaviour {
 	}
 	
 	function findProps() {
-		theDirector = GameObject.FindWithTag("god").GetComponent(Director);
+		if (GameObject.FindWithTag("god")) {
+			theDirector = GameObject.FindWithTag("god").GetComponent(Director);
+		}
 	}
 	
 	function notification(who : Object, msg : String, userInfo : Object) {
