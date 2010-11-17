@@ -12,7 +12,7 @@ class Director extends MonoBehaviour {
 	private var thePlayer : GameObject;
 	private var gameController : GameObject;
 	
-	private var score : int;
+	private static var score : int;
 	private var subtitles = new Array();
 	private var lastShownSubtitleTime : float;
 	
@@ -30,6 +30,8 @@ class Director extends MonoBehaviour {
 	private var timeSpentLoading: float = 0;
 	
 	public var timeCreated : float;
+	
+	private static var timeStartCountdown : float = -1;
 	
 	function Start() {
 		this.findProps();
@@ -157,7 +159,9 @@ class Director extends MonoBehaviour {
 		var subtitleHeight : float = 100.0;
 		
 		// time remaining
-		GUI.Box(new Rect(Screen.width - 10 - 202, 10, 202, 20), remainingTimeString() + " until full flood");
+		if (timeStartCountdown > 0) {
+			GUI.Box(new Rect(Screen.width - 10 - 202, 10, 202, 20), remainingTimeString() + " until full flood");
+		}
 		
 		// subtitle system
 		if (subtitles.length > 0) {
@@ -174,16 +178,62 @@ class Director extends MonoBehaviour {
 		
 	}
 	
+	function startCountdown() {
+		if (timeStartCountdown < 0) {
+			timeStartCountdown = Time.realtimeSinceStartup;	
+		}	
+	}
+	
 	function remainingTimeString() {
-		var mins = Mathf.Floor(remainingTime() / 60);
-		var secs = Mathf.Floor(remainingTime() - (mins * 60));
+		if (timeStartCountdown > 0) {
 		
-		return mins + "m " + secs + "s";
+			var mins = Mathf.Floor(remainingTime() / 60);
+			var secs = Mathf.Floor(remainingTime() - (mins * 60));
+			
+			return mins + "m " + secs + "s";
+		} else {
+			return "Countdown not started";	
+		}
 	}
 	
 	// functions related to director
 	function remainingTime() {
-		return (timeLimit * 60) + timeSpentLoading - Time.realtimeSinceStartup;
+		if (timeStartCountdown > 0) {
+			return (timeLimit * 60) + timeSpentLoading - (Time.realtimeSinceStartup - timeStartCountdown);
+		} else {
+			return -1;	
+		}
+	}
+	
+	function setRain(intense : float) {
+		if ((intense <= 1) && (intense > 0)) {
+			var rain = GameObject.FindWithTag("rain");
+			rain.particleEmitter.emit = true;
+			rain.audio.Play();
+			
+			rain.audio.volume = intense;
+			rain.particleEmitter.minEmission = intense * 2000;
+			rain.particleEmitter.maxEmission = intense * 3000;
+		}
+		
+	}
+	
+	function stopRain() {
+		var rain = GameObject.FindWithTag("rain");
+		rain.particleEmitter.emit = false;
+		rain.audio.Stop();
+	}
+	
+	function setSky(intense : float) {
+		if ((intense <= 1) && (intense > 0)) {
+			var sun = GameObject.FindWithTag("sun");
+			var ambience = GameObject.FindWithTag("ambience");
+			
+			sun.GetComponent(Light).intensity = intense * 0.64;
+			ambience.GetComponent(Light).intensity = intense * 0.1;
+			
+		}
+		
 	}
 	
 	function findProps() {
