@@ -116,6 +116,7 @@ class Director extends MonoBehaviour {
 	
 	function load_level(level : String) {
 		saveState();
+		subtitles.Clear();
 		previousLevelName = Application.loadedLevelName;
 		loadLevelTimeStamp = Time.realtimeSinceStartup;
 		Application.LoadLevel(level);
