@@ -15,6 +15,7 @@ class Director extends MonoBehaviour {
 	private static var score : int;
 	private var subtitles = new Array();
 	private var lastShownSubtitleTime : float;
+	private var subtitlePostDelay : float;
 	
 	// state
 	private var backpack_items = new Array();
@@ -44,32 +45,35 @@ class Director extends MonoBehaviour {
 	}
 	
 	function saveState() {
-		backpack_items = new Array();
-		copyArray(gameController.GetComponent(Backpack).items,backpack_items);
-		backpack_activeItem = gameController.GetComponent(Backpack).indexOfItem(gameController.GetComponent(Backpack).activeItem, gameController.GetComponent(Backpack).items);
-		backpack_hasActive = gameController.GetComponent(Backpack).hasActiveItem;
 		
-		player_health = gameController.GetComponent(Player).health;
-		
-		player_position = gameController.transform.position;
-		player_rotation = gameController.transform.rotation;
-		
-		hasState = true;
-
+		if (gameController) {		
+			backpack_items = new Array();
+			copyArray(gameController.GetComponent(Backpack).items,backpack_items);
+			backpack_activeItem = gameController.GetComponent(Backpack).indexOfItem(gameController.GetComponent(Backpack).activeItem, gameController.GetComponent(Backpack).items);
+			backpack_hasActive = gameController.GetComponent(Backpack).hasActiveItem;
+			
+			player_health = gameController.GetComponent(Player).health;
+			player_position = gameController.transform.position;
+			player_rotation = gameController.transform.rotation;
+			hasState = true;
+		}
 	}
 	
 	function restoreState() {
-		gameController.GetComponent(Backpack).items.clear();
-		copyArray(backpack_items, gameController.GetComponent(Backpack).items);
-		backpack_items = new Array();
-		gameController.GetComponent(Backpack).hasActiveItem = backpack_hasActive;
-		gameController.GetComponent(Backpack).activeItem = gameController.GetComponent(Backpack).items[backpack_activeItem];
-		gameController.GetComponent(Backpack).cullEquippedItems();
-		gameController.GetComponent(Backpack).wakeItems();
+		if (gameController) {		
 		
-		gameController.GetComponent(Player).health = player_health;
-				
-		hasState = false;
+			gameController.GetComponent(Backpack).items.clear();
+			copyArray(backpack_items, gameController.GetComponent(Backpack).items);
+			backpack_items = new Array();
+			gameController.GetComponent(Backpack).hasActiveItem = backpack_hasActive;
+			gameController.GetComponent(Backpack).activeItem = gameController.GetComponent(Backpack).items[backpack_activeItem];
+			gameController.GetComponent(Backpack).cullEquippedItems();
+			gameController.GetComponent(Backpack).wakeItems();
+			
+			gameController.GetComponent(Player).health = player_health;
+					
+			hasState = false;
+		}
 	}
 	
 	// state
@@ -87,11 +91,8 @@ class Director extends MonoBehaviour {
 		if ((Time.realtimeSinceStartup - loadLevelTimeStamp) > 0) {
 			timeSpentLoading += Time.realtimeSinceStartup - loadLevelTimeStamp;
 		}
-		if (level == 2) {
-			Screen.lockCursor = false;	
-		} else {
-			Screen.lockCursor = true;
-		}
+
+		Screen.lockCursor = true;
 	}
 	
 	function cullClones() {
@@ -168,10 +169,15 @@ class Director extends MonoBehaviour {
 			if ((Time.realtimeSinceStartup - lastShownSubtitleTime) <= subtitles[0].displayTime) {
 				GUI.Label(new Rect(subtitleLeftPadding, (Screen.height + subtitleHeight)/2, Screen.width - subtitleLeftPadding - subtitleRightPadding ,subtitleHeight), subtitles[0].content, subtitleStyle);
 			} else {
-				subtitles.RemoveAt(0);
-				lastShownSubtitleTime = Time.realtimeSinceStartup;	
-				if (subtitles.length == 0) {
-					lastShownSubtitleTime = 0.0;	
+				if ((Time.realtimeSinceStartup - lastShownSubtitleTime) <= (subtitles[0].displayTime + subtitles[0].postDelay)) {
+					// do post delay stuff
+					
+				} else {
+					subtitles.RemoveAt(0);
+					lastShownSubtitleTime = Time.realtimeSinceStartup;	
+					if (subtitles.length == 0) {
+						lastShownSubtitleTime = 0.0;	
+					}					
 				}
 			}
 		}

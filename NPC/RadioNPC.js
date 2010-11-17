@@ -84,6 +84,8 @@ class RadioNPC extends NPC {
 
 	function Update() {
 		
+		Screen.lockCursor = false;
+		
 		// update frequency display
 		freqText.guiText.text = "" + FREQ.ToString("00.00");
 		
