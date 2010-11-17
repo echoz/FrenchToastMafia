@@ -1,5 +1,9 @@
 class Objective extends MonoBehaviour {
 	public var completed : boolean = false;
+
+	var subtitleDelay : float = 2;
+	protected var subtitlesDone : boolean = false;
+	
 	protected var theDirector : Director;
 	protected var thePlayer : GameObject;
 	
