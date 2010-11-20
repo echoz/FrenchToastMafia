@@ -1,7 +1,8 @@
 class FluteItem extends InventoryItem {
-var sound : AudioClip;
-var source : AudioSource;
+	var sound : AudioClip;
 	
+	private var playing : boolean = false;
+
 	function Awake() {
 		worldName  = "Flute";
 		description = "Blow it for some stress-relieving music.";
@@ -29,11 +30,22 @@ var source : AudioSource;
 	function equippedDidGUIFunction() {
 	}
 	function performFunction() {
-		if (sound)
-            source.PlayOneShot (sound);
+		
+		findProps();
+		var audiosrc = thePlayer.GetComponent(Player).extraAudioSource;
+		
+		if ((audiosrc.isPlaying) && (playing)) {
+			audiosrc.Stop();	
+			playing = false;
+			
+		} else if ((!audiosrc.isPlaying) && (!playing)) {
+			playing = true;
+			audiosrc.clip = sound;
+			audiosrc.loop = true;
+			audiosrc.Play();
+		}	
+		
 	}		
-	function findProps() {
-	}
 	function willThrowItem() {
 	}
 	function didThrowItem() {
