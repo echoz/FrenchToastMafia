@@ -1,7 +1,5 @@
 class CarKeyItem extends InventoryItem {
 
-	private var theDirector : Director;
-
 	function Awake() {
 		worldName  = "Car Keys";
 		description = "You will need this to be able to drive your car";
@@ -35,9 +33,6 @@ class CarKeyItem extends InventoryItem {
 	function willThrowItem() {
 	}
 	function didThrowItem() {
-	}
-	function findProps() {
-		theDirector = GameObject.FindWithTag("god").GetComponent(Director);
 	}
 	
 }

@@ -1,7 +1,7 @@
 class SkateBoardItem extends InventoryItem {
 	
 	function Awake() {
-		worldName  = "SkateBoard";
+		worldName  = "Skateboard";
 		description = "Skate Skate Skate!! Run Run Run!!";
 		quantity = 1;
 		unitSpaceRequired = 1;

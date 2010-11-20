@@ -1,7 +1,7 @@
 class IPhone4Item extends InventoryItem {
 	
 	function Awake() {
-		worldName  = "IPhone4";
+		worldName  = "iPhone 4";
 		description = "Use it to call yourself.";
 		quantity = 1;
 		unitSpaceRequired = 1;

@@ -12,7 +12,6 @@ class GPSItem extends InventoryItem {
 	
 	private var thePlayerSphere : GameObject;
 	private var theCamera : GameObject;
-	private var theDirector : Director;
 	private var height = 30;
 	
 	private var screenRightPadding : float = 10.0;
@@ -51,11 +50,9 @@ class GPSItem extends InventoryItem {
 	function activeDidGUIFunction() {
 	}
 	function findProps() {
+		super.findProps();
 		thePlayerSphere = GameObject.FindWithTag("player_sphere");
 		theCamera = GameObject.FindWithTag("minimap_cam");
-		if (GameObject.FindWithTag("god")) {
-			theDirector = GameObject.FindWithTag("god").GetComponent(Director);
-		}
 	}
 		
 	function equippedWillUpdateFunction() {

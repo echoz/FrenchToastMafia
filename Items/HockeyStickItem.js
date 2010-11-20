@@ -1,7 +1,7 @@
 class HockeyStickItem extends InventoryItem {
 	
 	function Awake() {
-		worldName  = "HockeyStick";
+		worldName  = "Hockey Stick";
 		description = "Whack it hard. Are you game ENOUGH??";
 		quantity = 1;
 		unitSpaceRequired = 1;
