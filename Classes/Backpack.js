@@ -150,9 +150,15 @@ class Backpack extends MonoBehaviour {
 				}
 			}
 
+			if (items.length == 1) {
+				GUI.Label(new Rect(screenLeftPadding + activeWidth + 3, Screen.height - screenBottomPadding - 15, 150, 20), activeItem.worldName);
+			} else {
+				if (activeItem.icon_large)
+					GUI.Label(new Rect(screenLeftPadding + activeWidth + 3, Screen.height - screenBottomPadding - activeHeight - 3, 150, 20), activeItem.worldName);
+			}
+
 		} else {
 			GUI.Box(new Rect(screenLeftPadding, Screen.height - screenBottomPadding - activeHeight, activeWidth, activeHeight), "No Items");
-			
 		}
 		
 		callActiveDidGUIFunction();
@@ -241,21 +247,14 @@ class Backpack extends MonoBehaviour {
 		if ((Input.GetAxis("Mouse ScrollWheel") > 0) || (Input.GetKeyUp("q"))) {
 			// scroll down
 			idx = indexOfItem(activeItem, items);
-			if (idx == items.length-1) {
-				activeItem = items[0];	
-			} else {
-				activeItem = items[++idx];
-			}
 			
+			activeItem = items[(idx+1) % items.length];
 			
 		} else if (Input.GetAxis("Mouse ScrollWheel") < 0) {
 			// scroll up
 			idx = indexOfItem(activeItem, items);
-			if (idx == 0) {
-				activeItem = items[items.length-1];	
-			} else {
-				activeItem = items[--idx];
-			}
+			
+			activeItem = items[(idx-1) % items.length];
 			
 		}
 
