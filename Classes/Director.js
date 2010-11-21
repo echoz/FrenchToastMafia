@@ -1,6 +1,6 @@
 class Director extends MonoBehaviour {
 	
-	var timeLimit : int = 20; // in minutes
+	var timeLimit : int = 17; // in minutes
 	var hasState : boolean = false;
 	
 	var subtitleStyle = new GUIStyle();
@@ -16,6 +16,7 @@ class Director extends MonoBehaviour {
 	private var subtitles = new Array();
 	private var lastShownSubtitleTime : float;
 	private var subtitlePostDelay : float;
+	private var subtitleCallFunction : boolean = false;
 	
 	// state
 	private var backpack_items = new Array();
@@ -125,6 +126,12 @@ class Director extends MonoBehaviour {
 		Application.LoadLevel(level);
 	}
 	
+	function load_level(objective : Objective, level : String) {
+		if (objective.canLoadLevel()) {
+			this.load_level(level);
+		}
+	}
+	
 	function previous_level() {
 		loadLevelTimeStamp = Time.realtimeSinceStartup;
 		Application.LoadLevel(previousLevelName);
@@ -134,8 +141,11 @@ class Director extends MonoBehaviour {
 	function Update() {
 		if (Input.GetKeyUp("p")) {
 			Debug.Log(backpack_items);
-			Debug.Log(globalState);
 		}	
+		
+		if (Input.GetKeyUp("`")) {
+			this.nextSubtitle();	
+		}
 	}
 	
 	
@@ -154,6 +164,19 @@ class Director extends MonoBehaviour {
 		}
 	}
 	
+	function nextSubtitle() {
+		if (subtitles.length > 0) {
+			subtitleCallFunction = false;			
+			subtitles.RemoveAt(0);
+			lastShownSubtitleTime = Time.realtimeSinceStartup;	
+			
+			if (subtitles.length == 0) {
+				lastShownSubtitleTime = 0.0;	
+			}								
+		}
+
+	}
+	
 	function OnGUI() {
 		var subtitleLeftPadding : float = 100.0;
 		var subtitleRightPadding: float = 100.0;
@@ -161,23 +184,26 @@ class Director extends MonoBehaviour {
 		
 		// time remaining
 		if (timeStartCountdown > 0) {
-			GUI.Box(new Rect(Screen.width - 10 - 202, 10, 202, 20), remainingTimeString() + " until full flood");
+			GUI.Box(new Rect(Screen.width - 10 - 202, 10, 202, 20), remainingTimeString() + " until Tsunami");
 		}
 		
 		// subtitle system
 		if (subtitles.length > 0) {
 			if ((Time.realtimeSinceStartup - lastShownSubtitleTime) <= subtitles[0].displayTime) {
 				GUI.Label(new Rect(subtitleLeftPadding, (Screen.height + subtitleHeight)/2, Screen.width - subtitleLeftPadding - subtitleRightPadding ,subtitleHeight), subtitles[0].content, subtitleStyle);
+
+				if (!subtitleCallFunction) {
+					if (subtitles[0].callbackDelegate) {
+						subtitles[0].callbackDelegate.subtitleCallback(subtitles[0].callbackMessage);
+					}
+					subtitleCallFunction = true;	
+				}
 			} else {
 				if ((Time.realtimeSinceStartup - lastShownSubtitleTime) <= (subtitles[0].displayTime + subtitles[0].postDelay)) {
 					// do post delay stuff
 					
 				} else {
-					subtitles.RemoveAt(0);
-					lastShownSubtitleTime = Time.realtimeSinceStartup;	
-					if (subtitles.length == 0) {
-						lastShownSubtitleTime = 0.0;	
-					}					
+					this.nextSubtitle();
 				}
 			}
 		}
