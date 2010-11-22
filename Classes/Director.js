@@ -58,7 +58,13 @@ class Director extends MonoBehaviour {
 	}
 	
 	function restoreState() {
-		if (gameController) {		
+		gameController.GetComponent(Backpack).items.clear();
+		copyArray(backpack_items, gameController.GetComponent(Backpack).items);
+		backpack_items = new Array();
+		gameController.GetComponent(Backpack).hasActiveItem = backpack_hasActive;
+		gameController.GetComponent(Backpack).activeItem = gameController.GetComponent(Backpack).items[backpack_activeItem];
+		gameController.GetComponent(Backpack).cullEquippedItems();
+		gameController.GetComponent(Backpack).wakeItems();
 		
 			gameController.GetComponent(Backpack).items.clear();
 			copyArray(backpack_items, gameController.GetComponent(Backpack).items);
