@@ -1,5 +1,7 @@
 class Objective extends MonoBehaviour {
 	public var completed : boolean = false;
+	var nextLevel : String;
+	var developer : boolean = false;
 
 	var subtitleDelay : float = 2;
 	protected var subtitlesDone : boolean = false;
@@ -16,5 +18,15 @@ class Objective extends MonoBehaviour {
 		
 		if (GameObject.FindWithTag("god"))
 			theDirector = GameObject.FindWithTag("god").GetComponent(Director);	
+	}
+	
+	function completedLevel() {
+		findProps();
+		theDirector.load_level(nextLevel);
+	}
+	
+	function canLoadLevel() {
+		Debug.Log("Please override canLoadLevel");
+		return false;
 	}
 }
