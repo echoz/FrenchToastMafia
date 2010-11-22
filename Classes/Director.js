@@ -32,6 +32,8 @@ class Director extends MonoBehaviour {
 	
 	public var timeCreated : float;
 	
+	private static var timeStartCountdown : float = -1;
+	
 	function Start() {
 		this.findProps();
 		Screen.lockCursor = true;
