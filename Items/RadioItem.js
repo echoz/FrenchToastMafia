@@ -44,12 +44,20 @@ class RadioItem extends InventoryItem {
 	}
 	
 	function performFunction() {
+		findProps();
 		if (sosSent) {
 			switchedOn = !switchedOn;
 			director.addSubtitle(new Subtitle("Radio switched " + ((switchedOn)?"on":"off") + "", 2));	
 		} else {
-			findProps();
-			director.load_level("radio_scene");
+			
+			if (Application.loadedLevelName == "InteriorHouse") {
+				director.addSubtitle(new Subtitle("*static*", 4, 0.5));	
+				director.addSubtitle(new Subtitle("Michael: Damnit. No signal on this either. I think I might have to step out of the house to use this.", 5));	
+			} else {
+				findProps();
+				director.load_level("radio_scene");
+				
+			}
 		}
 	}
 	function willThrowItem() {
