@@ -27,18 +27,18 @@ class SkateBoardItem extends InventoryItem {
 	function equippedDidGUIFunction() {
 	}
 	function performFunction() {		
+		findProps();
+
 		if (FPSWalker.speed == 20) {
-			Debug.Log(FPSWalker.speed);
-			FPSWalker.speed = 100;
+			FPSWalker.speed = 40;
+			theDirector.addSubtitle(new Subtitle("Skateboard! Wheeeeeeeeeeeeeeeeee!", 3,0.5));
+
 		}
 		else {
-			Debug.Log(FPSWalker.speed);
 			FPSWalker.speed = 20;
+			theDirector.addSubtitle(new Subtitle("Got off the skateboard", 3,0.5));
 		}
 	}	
-	
-	function findProps() {
-	}
 	function willThrowItem() {
 	}
 	function didThrowItem() {
