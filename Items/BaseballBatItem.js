@@ -1,7 +1,7 @@
 class BaseballBatItem extends InventoryItem {
 	
 	function Awake() {
-		worldName  = "BaseballBat";
+		worldName  = "Baseball Bat";
 		description = "Homerun!!! You just gotta run for it!!";
 		quantity = 1;
 		unitSpaceRequired = 1;
