@@ -2,10 +2,11 @@ class Player extends WorldObject {
 	var health : float = 100.0;
 	var maxHealth : float = 100.0;
 	
-	var healthSubtractInterval : float = 5;
+	var healthSubtractInterval : float = 0.5;
 	var healthSubtractDelta : float = -1;
 	
 	var drowningAudio : AudioClip;
+	public var extraAudioSource : AudioSource;
 	
 	private var healthBarLength : float;
 	private var lastUpdateHealth : float = 0;
