@@ -248,15 +248,17 @@ class Backpack extends MonoBehaviour {
 		
 		if ((Input.GetAxis("Mouse ScrollWheel") > 0) || (Input.GetKeyUp("q"))) {
 			// scroll down
-			idx = indexOfItem(activeItem, items);
-			
-			activeItem = items[(idx+1) % items.length];
+			if (items.length > 0) {
+				idx = indexOfItem(activeItem, items);
+				activeItem = items[(idx+1) % items.length];
+			}
 			
 		} else if (Input.GetAxis("Mouse ScrollWheel") < 0) {
 			// scroll up
-			idx = indexOfItem(activeItem, items);
-			
-			activeItem = items[(idx-1) % items.length];
+			if (items.length > 0) {
+				idx = indexOfItem(activeItem, items);			
+				activeItem = items[(idx-1) % items.length];
+			}
 			
 		}
 
