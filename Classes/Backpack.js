@@ -226,7 +226,8 @@ class Backpack extends MonoBehaviour {
 				thrownItem.GetComponent(InventoryItem).quantity = thrownItemQuantity;
 				
 				if (thrownItemWorldName) {
-					theDirector.addSubtitle(new Subtitle("Dropped " + thrownItemWorldName, 2));
+					if (theDirector)
+						theDirector.addSubtitle(new Subtitle("Dropped " + thrownItemWorldName, 2));
 				}
 			}
 		}
