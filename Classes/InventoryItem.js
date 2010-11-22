@@ -10,7 +10,8 @@ class InventoryItem extends WorldObject {
 	var icon_large : Texture;
 	
 	private var showWindow : boolean = false;
-	private var thePlayer : GameObject;
+	protected var thePlayer : GameObject;
+	protected var theDirector : Director;
 	
 	// activeWillUpdateFunction = once activeItem, on going function in Update() before main body of code
 	// equippedWIllUpdateFunction = when in inventory function works in Update() before main body of code
@@ -58,6 +59,12 @@ class InventoryItem extends WorldObject {
 	function wake() {
 		Debug.Log("Please override wake to let item know its awoken from restore");
 	}
+	
+	function findProps() {
+		thePlayer = GameObject.FindWithTag("GameController");
+		if (GameObject.FindWithTag("god"))
+			theDirector = GameObject.FindWithTag("god").GetComponent(Director);
+	}	
 
 	function checkCollision(who : GameObject) {
 		return (who == thePlayer);
