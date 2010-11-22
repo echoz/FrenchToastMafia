@@ -60,13 +60,7 @@ class Director extends MonoBehaviour {
 	}
 	
 	function restoreState() {
-		gameController.GetComponent(Backpack).items.clear();
-		copyArray(backpack_items, gameController.GetComponent(Backpack).items);
-		backpack_items = new Array();
-		gameController.GetComponent(Backpack).hasActiveItem = backpack_hasActive;
-		gameController.GetComponent(Backpack).activeItem = gameController.GetComponent(Backpack).items[backpack_activeItem];
-		gameController.GetComponent(Backpack).cullEquippedItems();
-		gameController.GetComponent(Backpack).wakeItems();
+		if (gameController) {		
 		
 			gameController.GetComponent(Backpack).items.clear();
 			copyArray(backpack_items, gameController.GetComponent(Backpack).items);
@@ -97,11 +91,8 @@ class Director extends MonoBehaviour {
 		if ((Time.realtimeSinceStartup - loadLevelTimeStamp) > 0) {
 			timeSpentLoading += Time.realtimeSinceStartup - loadLevelTimeStamp;
 		}
-		if (level == 2) {
-			Screen.lockCursor = false;	
-		} else {
-			Screen.lockCursor = true;
-		}
+
+		Screen.lockCursor = true;
 	}
 	
 	function cullClones() {
