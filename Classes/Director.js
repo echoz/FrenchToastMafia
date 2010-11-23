@@ -33,6 +33,8 @@ class Director extends MonoBehaviour {
 	
 	public var timeCreated : float;
 	
+	private static var timeStartCountdown : float = -1;
+	
 	function Start() {
 		this.findProps();
 		Screen.lockCursor = true;
@@ -191,7 +193,7 @@ class Director extends MonoBehaviour {
 		
 		// time remaining
 		if (timeStartCountdown > 0) {
-			GUI.Box(new Rect(Screen.width - 10 - 202, 10, 202, 20), remainingTimeString() + " until Tsunami");
+			GUI.Box(new Rect(Screen.width - 10 - 202, 10, 202, 20), remainingTimeString() + " until full flood");
 		}
 		
 		// subtitle system
