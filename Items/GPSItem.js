@@ -53,6 +53,9 @@ class GPSItem extends InventoryItem {
 		super.findProps();
 		thePlayerSphere = GameObject.FindWithTag("player_sphere");
 		theCamera = GameObject.FindWithTag("minimap_cam");
+		if (GameObject.FindWithTag("god")) {
+			theDirector = GameObject.FindWithTag("god").GetComponent(Director);
+		}
 	}
 		
 	function equippedWillUpdateFunction() {
