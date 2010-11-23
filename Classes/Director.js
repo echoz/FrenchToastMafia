@@ -33,8 +33,6 @@ class Director extends MonoBehaviour {
 	
 	public var timeCreated : float;
 	
-	private static var timeStartCountdown : float = -1;
-	
 	function Start() {
 		this.findProps();
 		Screen.lockCursor = true;
@@ -92,8 +90,11 @@ class Director extends MonoBehaviour {
 		if ((Time.realtimeSinceStartup - loadLevelTimeStamp) > 0) {
 			timeSpentLoading += Time.realtimeSinceStartup - loadLevelTimeStamp;
 		}
-
-		Screen.lockCursor = true;
+		if (level == 2) {
+			Screen.lockCursor = false;	
+		} else {
+			Screen.lockCursor = true;
+		}
 	}
 	
 	function cullClones() {
