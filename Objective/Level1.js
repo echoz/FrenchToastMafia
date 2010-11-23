@@ -7,6 +7,18 @@ class Level1 extends Objective {
 
 	private var exitVicinity : boolean = false;
 	private var exitAnyway : boolean = false;
+	private var timeCreated : float = -1;
+	
+	function Awake() {
+		subtitleDelay = 0;
+		timeCreated = Time.realtimeSinceStartup;		
+
+		var lights = GameObject.FindGameObjectsWithTag("lights");
+		
+		for (var lightt : GameObject in lights) {
+			lightt.light.intensity = 0;
+		}
+	}
 
 	function notification(who : Object, msg : String, userInfo : Object) {
 		if (msg == "InTriggerSpace") {
@@ -36,12 +48,50 @@ class Level1 extends Objective {
 	}
 	
 	function Update() {
+				
+		// startup subtitle block
+		if ((Mathf.Floor(Time.realtimeSinceStartup - timeCreated) == subtitleDelay) && (!subtitlesDone)) {
+			subtitlesDone = true;
+			findProps();
+			theDirector.addSubtitle(new Subtitle("Radio: Bzzzzzzzzz. This is an alert.",5,0.5));
+			theDirector.addSubtitle(new Subtitle("Michael: Huh? What was that?.",5,0.5));
+		}				
+				
+				
+		// fade in lights;
+		if (!fadeInLights) {
+			var lights = GameObject.FindGameObjectsWithTag("lights");
+
+			if ((Time.realtimeSinceStartup - timeCreated) <= fadeInLightsTime) {
+
+				for (var lightt : GameObject in lights) {
+					lightt.light.intensity = ((Time.realtimeSinceStartup - timeCreated)/fadeInLightsTime) * lightIntensity;
+				}
+				
+			} else {
+				for (var lightt : GameObject in lights) {
+					lightt.light.intensity = lightIntensity;
+				}
+				
+				fadeInLights = false;
+					
+			}
+		}
+		
+		
+		
+		// track time
+
+		
+		
+		
+		// track keypress
 		if (Input.GetKeyUp("e") && (exitVicinity)) {
 			
 			if (!exitAnyway) {
 				var msgs = checkBackpack();
 				
-				theDirector.addSubtitle(new Subtitle("I wonder if I have everything...",2));
+				theDirector.addSubtitle(new Subtitle("I wonder if I have everything I need...",2));
 				if (msgs.length > 0) {
 					
 					for (var msg in msgs) {
@@ -52,7 +102,7 @@ class Level1 extends Objective {
 				exitAnyway = true;
 				
 			} else {
-				
+				// calculate and update scores first
 				theDirector.load_level("errrr");
 			}
 		}
