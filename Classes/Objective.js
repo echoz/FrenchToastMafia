@@ -19,4 +19,14 @@ class Objective extends MonoBehaviour {
 		if (GameObject.FindWithTag("god"))
 			theDirector = GameObject.FindWithTag("god").GetComponent(Director);	
 	}
+	
+	function completedLevel() {
+		findProps();
+		theDirector.load_level(nextLevel);
+	}
+	
+	function canLoadLevel() {
+		Debug.Log("Please override canLoadLevel");
+		return false;
+	}
 }

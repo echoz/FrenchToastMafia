@@ -24,9 +24,13 @@ class Level0 extends Objective {
 			theDirector.addSubtitle(new Subtitle("Until that day...",5,3));
 		}
 		if (Input.GetKeyUp("e")) {
-			findProps();
-			theDirector.load_level("InteriorHouse");		
+			completed = true;
+			this.completedLevel();
 		}
+	}
+	
+	function canLoadLevel() {
+		return completed;	
 	}
 	
 	function OnGUI() {
@@ -34,7 +38,7 @@ class Level0 extends Objective {
 		style.alignment = TextAnchor.MiddleCenter;
 		style.normal.textColor  = new Color(1,1,1,1);
 
-		if ((Time.realtimeSinceStartup - timeCreated) >= (subtitleDelay + 102)) {
+		if ((Time.realtimeSinceStartup - timeCreated) >= (subtitleDelay + 70)) {
 			GUI.Label (new Rect ((Screen.width - 300)/2,(Screen.height-50)/2,300,50), "Press [E] to continue", style);
 
 		}
