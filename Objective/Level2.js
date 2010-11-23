@@ -3,6 +3,8 @@ class Level2 extends Objective {
 	private var lucyVicinity : boolean = false;
 	private var lucySaved : boolean = false;
 	
+	private var timeCreated : float;
+	
 	function Awake() {
 		subtitleDelay = 0;
 		timeCreated = Time.realtimeSinceStartup;
