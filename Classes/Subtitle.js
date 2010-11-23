@@ -22,6 +22,7 @@ class Subtitle {
 	public function Subtitle(content : String, displayTime : float) {
 		this.content = content;
 		this.displayTime = displayTime;	
+		this.postDelay = 0;
 	}	
 	
 }
