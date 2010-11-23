@@ -49,10 +49,12 @@ class Director extends MonoBehaviour {
 		
 		if (gameController) {		
 			backpack_items = new Array();
-			copyArray(gameController.GetComponent(Backpack).items,backpack_items);
-			backpack_activeItem = gameController.GetComponent(Backpack).indexOfItem(gameController.GetComponent(Backpack).activeItem, gameController.GetComponent(Backpack).items);
-			backpack_hasActive = gameController.GetComponent(Backpack).hasActiveItem;
-			
+			if (gameController.GetComponent(Backpack).items.length > 0) {
+				copyArray(gameController.GetComponent(Backpack).items,backpack_items);
+				backpack_activeItem = gameController.GetComponent(Backpack).indexOfItem(gameController.GetComponent(Backpack).activeItem, gameController.GetComponent(Backpack).items);
+				backpack_hasActive = gameController.GetComponent(Backpack).hasActiveItem;
+			}
+
 			player_health = gameController.GetComponent(Player).health;
 			player_position = gameController.transform.position;
 			player_rotation = gameController.transform.rotation;
@@ -62,14 +64,16 @@ class Director extends MonoBehaviour {
 	
 	function restoreState() {
 		if (gameController) {		
+			if (backpack_items.length > 0) {
 		
-			gameController.GetComponent(Backpack).items.clear();
-			copyArray(backpack_items, gameController.GetComponent(Backpack).items);
-			backpack_items = new Array();
-			gameController.GetComponent(Backpack).hasActiveItem = backpack_hasActive;
-			gameController.GetComponent(Backpack).activeItem = gameController.GetComponent(Backpack).items[backpack_activeItem];
-			gameController.GetComponent(Backpack).cullEquippedItems();
-			gameController.GetComponent(Backpack).wakeItems();
+				gameController.GetComponent(Backpack).items.clear();
+				copyArray(backpack_items, gameController.GetComponent(Backpack).items);
+				backpack_items = new Array();
+				gameController.GetComponent(Backpack).hasActiveItem = backpack_hasActive;
+				gameController.GetComponent(Backpack).activeItem = gameController.GetComponent(Backpack).items[backpack_activeItem];
+				gameController.GetComponent(Backpack).cullEquippedItems();
+				gameController.GetComponent(Backpack).wakeItems();
+			}
 			
 			gameController.GetComponent(Player).health = player_health;
 					
@@ -102,8 +106,6 @@ class Director extends MonoBehaviour {
 			var realDirector : GameObject = directors[0];
 
 			for (var d : GameObject in directors) {
-				Debug.Log(d.GetComponent(Director).timeCreated);
-				Debug.Log(realDirector.GetComponent(Director).timeCreated);				
 				if (d.GetComponent(Director).timeCreated < realDirector.GetComponent(Director).timeCreated) {
 					realDirector = d;	
 				}
@@ -111,6 +113,7 @@ class Director extends MonoBehaviour {
 			
 			for (var d : GameObject in directors) {
 				if (d !== realDirector) {
+					Debug.Log("killed!");
 					Destroy(d);	
 				}	
 			}
