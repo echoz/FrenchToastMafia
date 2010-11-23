@@ -5,9 +5,9 @@ class Director extends MonoBehaviour {
 	
 	var subtitleStyle = new GUIStyle();
 	
-	static var globalState = new Hashtable();	
+	static var globalState = new Hashtable();
+	
 	private var gameState : int = 0;
-
 	private var water : GameObject;
 	private var thePlayer : GameObject;
 	private var gameController : GameObject;
@@ -16,6 +16,7 @@ class Director extends MonoBehaviour {
 	private var subtitles = new Array();
 	private var lastShownSubtitleTime : float;
 	private var subtitlePostDelay : float;
+	private var subtitleCallFunction : boolean = false;
 	
 	// state
 	private var backpack_items = new Array();
@@ -186,7 +187,7 @@ class Director extends MonoBehaviour {
 		
 		// time remaining
 		if (timeStartCountdown > 0) {
-			GUI.Box(new Rect(Screen.width - 10 - 202, 10, 202, 20), remainingTimeString() + " until full flood");
+			GUI.Box(new Rect(Screen.width - 10 - 202, 10, 202, 20), remainingTimeString() + " until Tsunami");
 		}
 		
 		// subtitle system
@@ -205,11 +206,7 @@ class Director extends MonoBehaviour {
 					// do post delay stuff
 					
 				} else {
-					subtitles.RemoveAt(0);
-					lastShownSubtitleTime = Time.realtimeSinceStartup;	
-					if (subtitles.length == 0) {
-						lastShownSubtitleTime = 0.0;	
-					}					
+					this.nextSubtitle();
 				}
 			}
 		}

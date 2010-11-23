@@ -198,6 +198,8 @@ class Backpack extends MonoBehaviour {
 				theDirector.addSubtitle(new Subtitle("Picked up " + itemsPicked, 2));
 			}
 			
+			theDirector.addSubtitle(new Subtitle("Picked up " + itemsPicked, 2));
+			
 			if (previousItemsCount == 0) {
 				activeItem = items[0];
 				hasActiveItem = true;
