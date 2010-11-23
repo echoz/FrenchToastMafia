@@ -5,9 +5,9 @@ class Director extends MonoBehaviour {
 	
 	var subtitleStyle = new GUIStyle();
 	
-	static var globalState = new Hashtable();
-	
+	static var globalState = new Hashtable();	
 	private var gameState : int = 0;
+
 	private var water : GameObject;
 	private var thePlayer : GameObject;
 	private var gameController : GameObject;
