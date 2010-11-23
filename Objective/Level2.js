@@ -1,13 +1,29 @@
 class Level2 extends Objective {
 	
+	var lucy : GameObject;
+	var car : GameObject;
+	
 	private var lucyVicinity : boolean = false;
 	private var lucySaved : boolean = false;
+	
+	private var lucyHelpVicinity : boolean = false;
+	private var lucyHelpShown : boolean = false;
+	
+	private var timeCreated : float;
 	
 	function Awake() {
 		subtitleDelay = 0;
 		timeCreated = Time.realtimeSinceStartup;
 		nextLevel = "";
-
+		
+		findProps();
+		if (theDirector.globalState.Contains("lucySaved")) {
+			lucySaved = theDirector.globalState["lucySaved"];
+		}
+		
+		if (lucySaved) {
+			Destroy(lucy);	
+		}
 	}
 
 	function notification(who : Object, msg : String, userInfo : Object) {
@@ -16,10 +32,18 @@ class Level2 extends Objective {
 				lucyVicinity = true;	
 			}
 			
+			if (who.worldName == "LucyHelpTrigger") {
+				lucyHelpVicinity = true;	
+			}
+			
 		} else if (msg == "OutTriggerSpace") {
 			if (who.worldName == "LucyTrigger") {
 				lucyVicinity = false;
 			}	
+			if (who.worldName == "LucyHelpTrigger") {
+				lucyHelpVicinity = false;	
+				lucyHelpShown = false;
+			}
 			
 		}
 	}
@@ -38,19 +62,33 @@ class Level2 extends Objective {
 	function Update() {
 				
 		// startup subtitle block
-		if ((Mathf.Floor(Time.realtimeSinceStartup - timeCreated) == subtitleDelay) && (!subtitlesDone)) {
-			subtitlesDone = true;
-			findProps();
-			theDirector.addSubtitle(new Subtitle("Michael: Oh man. Its raining too?",5,0.5));
-			theDirector.addSubtitle(new Subtitle("Michael: What crummy weather to make things worse",5,10));
-			theDirector.addSubtitle(new Subtitle("Lucy: HELLLLLPPPPPPPPPPPPPPPP!!!!!!!!!!",5,0.5));
-			theDirector.addSubtitle(new Subtitle("Lucy: SOMEBODY HELP ME!",5,0.5));
+		findProps();
+		if (!theDirector.globalState.Contains("outdoorsubtitle")) {
+	
+			if ((Mathf.Floor(Time.realtimeSinceStartup - timeCreated) == subtitleDelay) && (!subtitlesDone)) {
+				subtitlesDone = true;
+				theDirector.addSubtitle(new Subtitle("Michael: Oh man. Its raining too?",5,0.5));
+				theDirector.addSubtitle(new Subtitle("Michael: What crummy weather to make things worse",5,0.5));
+	
+				theDirector.globalState.Add("outdoorsubtitle", true);
+			}
+		}
+		
+		if ((lucyHelpVicinity) && (!lucyHelpShown) && (!lucySaved)) {		
+			lucyHelpShown = true;	
+			theDirector.addSubtitle(new Subtitle("Lucy: HHHHHHHEEEEEEEEEELLLLLLPPPPPPPPP!",5,0.5));
+			theDirector.addSubtitle(new Subtitle("Lucy: SOMEBODY HELP ME!!!!",5,10));
 
-		}				
+		}
 
 		// track keypress
 		if (Input.GetKeyUp("e") && (lucyVicinity) && (!lucySaved)) {
-			
+			if (thePlayer.GetComponent("Backpack").hasItemOfType("RopeItem")) {
+				theDirector.load_level("Lucy");
+			} else {
+				theDirector.addSubtitle(new Subtitle("Micahel: Can't do anything without a rope.",5,0.5));
+				theDirector.addSubtitle(new Subtitle("Micahel: The thing's too heavy to lift.",5,10));			
+			}
 		}
 		
 	}

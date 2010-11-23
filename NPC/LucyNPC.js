@@ -142,6 +142,12 @@ class LucyNPC extends NPC {
 			if(GUI.Button(new Rect(100, 95, 100,25), "Your Welcome!", "button"))
 			{
 			//player will leave scene and score will be updated
+			
+				var director = GameObject.FindWithTag("god").GetComponent(Director);
+				director.globalState.Remove("lucySaved");
+				director.globalState.Add("lucySaved", true);
+				director.previous_level();
+			
 			}
 		}
 		//Dialouge if player agreed to help but could not lift the tree in the time limited

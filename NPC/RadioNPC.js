@@ -58,28 +58,15 @@ class RadioNPC extends NPC {
 			
 		if (!PTTENABLED) {	
 			// display correct code stuff
-			var windowRect : Rect = new Rect(Screen.width/2 - 400, Screen.height/2 - 300, 800, 500);
 			if (CODE == CORRECT_CODE) {
-				GUI.Window(0,windowRect, WindowFunction, "");
+				Destroy (this);
+				
+				var director = GameObject.FindWithTag("god").GetComponent(Director);
+				director.globalState.Remove("sosSent");
+				director.globalState.Add("sosSent", true);
+				director.previous_level();
 			}
 		}
-	}
-
-	function WindowFunction(windowID : int) {
-		//map image is displayed in the pop-up window.
-		GUI.Label(new Rect(120, 15, 540, 400), ptt_map_image);
-		GUI.Label(new Rect(120, 350, 540, 100), "Proceed to the location marked on the map.", pttTextStyle);
-		//when the exit button is pressed, the window is destroyed.
-		if (GUI.Button (Rect (120, 400, 540, 50), "Exit", "button")) 
-		{
-			Destroy (this);
-			
-			var director = GameObject.FindWithTag("god").GetComponent(Director);
-			director.globalState.Add("sosSent", true);
-			director.previous_level();
-
-		}
-
 	}
 
 	function Update() {
