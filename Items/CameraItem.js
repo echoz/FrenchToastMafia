@@ -31,10 +31,9 @@ class CameraItem extends InventoryItem {
 	function equippedDidGUIFunction() {
 	}
 	function performFunction() {
-		findProps();
-		var audiosrc = thePlayer.GetComponent(Player).extraAudioSource;
+		super.findProps();
+		var audiosrc : AudioSource = thePlayer.GetComponent(Player).extraAudioSource;
 		audiosrc.PlayOneShot(performAudio);
-		
 		
 		//var screenshotCount : int = 1;
 		var screenshotFilename : String = "screenshot" + screenshotCount + ".png";
@@ -45,9 +44,7 @@ class CameraItem extends InventoryItem {
 		} 
 		Application.CaptureScreenshot(screenshotFilename);
 	}
-	
-	function findProps() {
-	}
+
 	function willThrowItem() {
 	}
 	function didThrowItem() {

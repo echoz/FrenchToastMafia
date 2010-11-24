@@ -45,6 +45,7 @@ class FlashlightItem extends InventoryItem {
 	}
 	
 	function findProps() {
+		super.findProps();
 		flashlight = GameObject.Find("Player/Flashlight").GetComponent(Light);
 	}
 	
