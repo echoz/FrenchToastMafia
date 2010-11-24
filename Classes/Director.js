@@ -33,6 +33,8 @@ class Director extends MonoBehaviour {
 	
 	public var timeCreated : float;
 	
+	// existing water level: 23, raise to 345. underwater surface move to 344
+	
 	private static var timeStartCountdown : float = -1;
 	
 	function Start() {
@@ -46,6 +48,14 @@ class Director extends MonoBehaviour {
 	}
 	
 	function saveState() {
+
+		var objective;
+
+		if (GameObject.FindWithTag("objective")) {
+			objective = GameObject.FindWithTag("objective").GetComponent(Objective);
+		}
+		
+		objective.willSaveState();
 		
 		if (gameController) {		
 			backpack_items = new Array();
@@ -60,9 +70,20 @@ class Director extends MonoBehaviour {
 			player_rotation = gameController.transform.rotation;
 			hasState = true;
 		}
+		
+		objective.didSaveState();		
 	}
 	
 	function restoreState() {
+		var objective;
+
+		if (GameObject.FindWithTag("objective")) {
+			objective = GameObject.FindWithTag("objective").GetComponent(Objective);
+		}
+		
+		if (objective)
+			objective.willRestoreState();
+		
 		if (gameController) {		
 			if (backpack_items.length > 0) {
 		
@@ -79,6 +100,8 @@ class Director extends MonoBehaviour {
 					
 			hasState = false;
 		}
+		if (objective)
+			objective.didRestoreState();		
 	}
 	
 	// state
@@ -222,10 +245,14 @@ class Director extends MonoBehaviour {
 	function remainingTimeString() {
 		if (timeStartCountdown > 0) {
 		
-			var mins = Mathf.Floor(remainingTime() / 60);
-			var secs = Mathf.Floor(remainingTime() - (mins * 60));
+			if (remainingTime() >=0) {
+				var mins = Mathf.Floor(remainingTime() / 60);
+				var secs = Mathf.Floor(remainingTime() - (mins * 60));
 			
-			return mins + "m " + secs + "s";
+				return mins + "m " + secs + "s";
+			} else {
+				return "0m 0s";	
+			}
 		} else {
 			return "Countdown not started";	
 		}
@@ -246,9 +273,9 @@ class Director extends MonoBehaviour {
 			rain.particleEmitter.emit = true;
 			rain.audio.Play();
 			
-			rain.audio.volume = intense;
-			rain.particleEmitter.minEmission = intense * 2000;
-			rain.particleEmitter.maxEmission = intense * 3000;
+			rain.audio.volume = (intense * 0.5) + 0.5;
+			rain.particleEmitter.minEmission = Mathf.Floor(intense * 2000);
+			rain.particleEmitter.maxEmission = Mathf.Floor(intense * 3000);
 		}
 		
 	}
