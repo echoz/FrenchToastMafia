@@ -1,6 +1,7 @@
 class LucyNPC extends NPC {
 	// public stuff
 	var tree : GameObject;
+	var incrementDelta : float = 50;
 
 	// lucy
 	private var play : String = "Take 001";
@@ -20,12 +21,15 @@ class LucyNPC extends NPC {
 	private var displaySeconds : int;
 	private var startTimer : boolean = false;
  	var countDownSeconds : int = 10;
- 	var TextStyleTimer = new GUIStyle();
 	var TextStyleInstruction = new GUIStyle();
 	
 	private var playedTreeAnimationTime : float = -1.0;
 	private var playedSitupAnimationTime : float = -1.0;
-		
+	
+	function Awake() {
+		Screen.lockCursor = false;	
+	}
+	
 	//print all the GUI of the whole interaction with player and lucy
 	function OnGUI() {
 		//get canter coordinate
@@ -39,7 +43,9 @@ class LucyNPC extends NPC {
 		//player chooses to leave lucy alone
 		if(reject)
 		{
-			GUI.Window (1, new Rect (width-150,height,300,150), DoWindow, "Lucy");
+			var director = GameObject.FindWithTag("god").GetComponent(Director);
+			director.globalState.Remove("lucySaved");
+			director.previous_level();
 		}
 		//successfully lift the tree
 		if(isLifted)
@@ -56,13 +62,12 @@ class LucyNPC extends NPC {
 		if(accept && !isLifted)
 		{
 			//Draw the empty bar
-			GUI.Box(new Rect(Screen.width/2 - maxGaugeBar/2, 15, maxGaugeBar, 20),"");
 			var guiTime = Time.realtimeSinceStartup - startTime;
 			
 			//update the bar when "E" is press when the time is ticking
 			if (gaugeBar < maxGaugeBar && gaugeBar > 0 && !timeup)
 			{
-				GUI.Box(new Rect(Screen.width/2 - maxGaugeBar/2, 15, gaugeBar, 20),"");
+				GUI.Box(new Rect(Screen.width/2 - maxGaugeBar/2, (Screen.height/2) + 50, gaugeBar, 20),"");
 			}
 			//To prevent the bar from overshooting also indicate that the tree is lifted in time
 			else if( gaugeBar >= maxGaugeBar && !timeup)
@@ -94,11 +99,13 @@ class LucyNPC extends NPC {
 				//display the timer
 				roundedRestSeconds = Mathf.CeilToInt(restSeconds);
 				displaySeconds = roundedRestSeconds % 60; 
-				text = String.Format ("{00} sec left", displaySeconds);
+				remainTimeText = String.Format ("{00} sec left", displaySeconds);
 				//display the countdown			
-				GUI.Box (Rect (Screen.width/2-50, 50, 100, 30), text, TextStyleTimer );
+//				GUI.Box (Rect (Screen.width/2-50, 50, 100, 30), text, TextStyleTimer );
+				GUI.Box(new Rect(Screen.width/2 - maxGaugeBar/2, (Screen.height/2) + 50, maxGaugeBar, 20), remainTimeText);
+				
 				//display instruction to lift the tree
-				GUI.Label (Rect (Screen.width/2-100, 80, 200, 30), "Press [E] to fill the gauge!!",TextStyleInstruction);
+				GUI.Label (Rect (Screen.width/2 - maxGaugeBar/2, (Screen.height/2) + 90, maxGaugeBar, 20), "Press [E] to lift the log",TextStyleInstruction);
 			}
 		}		
 	}
@@ -125,20 +132,11 @@ class LucyNPC extends NPC {
 				show = false;
 			}
 		}
-		//Dialouge when player choose not to help
-		if(windowID == 1)
-		{
-			//Get scolding for heartless act.
-			GUI.Label (new Rect(10, 15, 280, 280), "Fuck You! You COLD HEARTED BASTARD. GO TO HELL!");
-			if(GUI.Button(new Rect(100, 95, 100,25), "Whatever...", "button"))
-			{
-				//player will leave the scene and score will be deducted.
-			}
-		}
+
 		//Dialouge when player successfully lifted the tree
 		if(windowID == 2)
 		{
-			GUI.Label (new Rect(10, 15, 280, 280), "Thank you beri much!");
+			GUI.Label (new Rect(10, 15, 280, 280), "Thank you so much!");
 			if(GUI.Button(new Rect(100, 95, 100,25), "Your Welcome!", "button"))
 			{
 			//player will leave scene and score will be updated
@@ -189,7 +187,7 @@ class LucyNPC extends NPC {
 		//increase the gauge bar
 		if( Input.GetKeyUp( "e" ) && !timeup && accept && !isLifted)
 		{
-			gaugeBar = gaugeBar + 30;
+			gaugeBar = gaugeBar + incrementDelta;
 			tree.animation.Play("shake");
 		}
 		//decrease the gaugebar gradually to make it abit harder
