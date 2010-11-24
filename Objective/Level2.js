@@ -59,9 +59,7 @@ class Level2 extends Objective {
 		if (theDirector.globalState.Contains("exit_attic")) {
 			exit_attic = theDirector.globalState["exit_attic"];
 			if (exit_attic) {
-				thePlayer.transform.position.x = 792.1302;
-				thePlayer.transform.position.y = 381.9263;
-				thePlayer.transform.position.z = -735.8791;
+				thePlayer.transform.position = Vector3(792.1302,381.9263,-735.8791);
 				
 				// -1614.024 41.57388 -558.1433
 			}
@@ -125,7 +123,7 @@ class Level2 extends Objective {
 			GUI.Label (new Rect ((Screen.width - 300)/2,(Screen.height-50)/2,300,50), "Press [E] to try and save lucy", style);			
 		}
 		
-		if (houseVicinity) {
+		if ((houseVicinity) && (!exit_attic)) {
 			GUI.Label (new Rect ((Screen.width - 300)/2,(Screen.height-50)/2,300,50), "Press [E] to enter house", style);			
 		}
 	}
@@ -134,7 +132,7 @@ class Level2 extends Objective {
 		if (startFloodingTime > 0) {
 			if ((theDirector.waterLevel() > 0) && (theDirector.waterLevel() < 358)) {
 				var floodTimeLimit = (theDirector.timeLimit * 60) - (startFloodingTime - theDirector.timeStartCountdown);
-				theDirector.setWaterLevel(((1 - ((theDirector.remainingTime()  - startFloodingTime) / floodTimeLimit)) *  (358-23)) + 20);
+				theDirector.setWaterLevel(((1 - ((theDirector.remainingTime()  - startFloodingTime) / floodTimeLimit)) *  (358-23)) + 9);
 			}
 		}
 	}
