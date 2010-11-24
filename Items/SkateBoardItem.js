@@ -32,13 +32,13 @@ class SkateBoardItem extends InventoryItem {
 	function performFunction() {		
 		findProps();
 
-		if (FPSWalker.speed == normalSpeed) {
-			FPSWalker.speed = skateSpeed;
+		if (thePlayer.GetComponent(FPSWalker).speed == normalSpeed) {
+			thePlayer.GetComponent(FPSWalker).speed = skateSpeed;
 			theDirector.addSubtitle(new Subtitle("Skateboard! Wheeeeeeeeeeeeeeeeee!", 3));
 
 		}
 		else {
-			FPSWalker.speed = normalSpeed;
+			thePlayer.GetComponent(FPSWalker).speed = normalSpeed;
 			theDirector.addSubtitle(new Subtitle("Got off the skateboard", 3));
 		}
 	}	
