@@ -25,7 +25,7 @@ class Level1 extends Objective {
 		}
 		
 		findProps();
-		theDirector.setRain(0.8);
+		theDirector.setRain(0);
 		
 	}
 
