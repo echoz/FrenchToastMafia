@@ -9,16 +9,16 @@ class Level2 extends Objective {
 	private var lucyHelpVicinity : boolean = false;
 	private var lucyHelpShown : boolean = false;
 	
+	private var houseVicinity : boolean = false;
+	
 	private var timeCreated : float;
+	
+	private var startFloodingTime : float = -1;
 	
 	function Awake() {
 		subtitleDelay = 0;
 		timeCreated = Time.realtimeSinceStartup;
 		nextLevel = "";
-		
-		findProps();
-		
-		theDirector.setRain(0.3);
 		
 	}
 
@@ -28,9 +28,11 @@ class Level2 extends Objective {
 		
 		theDirector.globalState.Remove("car_pos");
 		theDirector.globalState.Remove("car_rot");
+		theDirector.globalState.Remove("flood_starttime");
 		
 		theDirector.globalState.Add("car_pos", car.transform.position);
 		theDirector.globalState.Add("car_rot", car.transform.rotation);
+		theDirector.globalState.Add("flood_starttime", startFloodingTime);
 		
 	}
 	
@@ -44,6 +46,11 @@ class Level2 extends Objective {
 		if (theDirector.globalState.Contains("car_rot")) {
 			car.transform.rotation = theDirector.globalState["car_rot"];	
 		}
+
+		if (theDirector.globalState.Contains("startFloodingTime")) {
+			startFloodingTime = theDirector.globalState["flood_starttime"];	
+		}
+
 		
 		if (theDirector.globalState.Contains("lucySaved")) {
 			lucySaved = theDirector.globalState["lucySaved"];
@@ -66,6 +73,18 @@ class Level2 extends Objective {
 				lucyHelpVicinity = true;	
 			}
 			
+			if (who.worldName == "StartFloodTrigger") {
+				if (startFloodingTime < 0) {
+					Debug.Log("START FLOODING");
+					startFloodingTime = Time.realtimeSinceStartup;	
+				}	
+			}
+			if (who.worldName == "AbandonedHouseTrigger") {
+				houseVicinity = true;	
+			}
+			
+			
+			
 		} else if (msg == "OutTriggerSpace") {
 			if (who.worldName == "LucyTrigger") {
 				lucyVicinity = false;
@@ -73,6 +92,9 @@ class Level2 extends Objective {
 			if (who.worldName == "LucyHelpTrigger") {
 				lucyHelpVicinity = false;	
 				lucyHelpShown = false;
+			}
+			if (who.worldName == "AbandonedHouseTrigger") {
+				houseVicinity = false;	
 			}
 			
 		}
@@ -87,7 +109,21 @@ class Level2 extends Objective {
 		if ((lucyVicinity) && (!lucySaved)) {
 			GUI.Label (new Rect ((Screen.width - 300)/2,(Screen.height-50)/2,300,50), "Press [E] to try and save lucy", style);			
 		}
+		
+		if (houseVicinity) {
+			GUI.Label (new Rect ((Screen.width - 300)/2,(Screen.height-50)/2,300,50), "Press [E] to enter house", style);			
+		}
 	}
+	
+	function FixedUpdate() {
+		if (startFloodingTime > 0) {
+			if ((theDirector.waterLevel() > 0) && (theDirector.waterLevel() < 358)) {
+				var floodTimeLimit = (theDirector.timeLimit * 60) - (startFloodingTime - theDirector.timeStartCountdown);
+				theDirector.setWaterLevel(((1 - ((theDirector.remainingTime()  - startFloodingTime) / floodTimeLimit)) *  (358-23)) + 20);
+			}
+		}
+	}
+	
 	
 	function Update() {
 				
@@ -120,6 +156,10 @@ class Level2 extends Objective {
 				theDirector.addSubtitle(new Subtitle("Micahel: Can't do anything without a rope.",4,0.5));
 				theDirector.addSubtitle(new Subtitle("Micahel: The thing's too heavy to lift.",4,0.5));			
 			}
+		}
+		
+		if (Input.GetKeyUp("e") && (houseVicinity)) {
+			theDirector.load_level("");
 		}
 		
 	}
