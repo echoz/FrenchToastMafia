@@ -38,6 +38,7 @@ class GPSItem extends InventoryItem {
 	function wake() {
 		findProps();
 		theCamera.GetComponent(Camera).enabled = switchedOn;
+		setCameraPos();
 		
 	}
 
@@ -112,15 +113,20 @@ class GPSItem extends InventoryItem {
 		theDirector.addSubtitle(new Subtitle("GPS switched " + ((switchedOn)?"on":"off") + "", 2));
 
 		theCamera.GetComponent(Camera).enabled = switchedOn;
-		
+		setCameraPos();
+
+	}
+	
+	function setCameraPos() {
 		var posX : float = (Screen.width - displayWidth - screenRightPadding - internalPadding) / Screen.width;
 		var posY : float = (Screen.height - displayHeight - screenTopPadding - (internalPadding * 2)) / Screen.height;
 		var camWidth : float = (displayWidth / Screen.width);
 		var camHeight : float = (displayHeight / Screen.height);
 
 		theCamera.camera.rect = new Rect(posX,posY,camWidth,camHeight);
-
+	
 	}
+	
 	function willThrowItem() {
 		theCamera.GetComponent(Camera).enabled = false;
 
