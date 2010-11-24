@@ -10,7 +10,7 @@ class ObjectiveTrigger extends WorldObject {
 	
 	// gps, first aid, car keys, radio, food rations, rope
 	function OnTriggerEnter(who : Collider) {
-		if( who.gameObject.tag == "GameController" ) {
+		if ((who.gameObject.tag == "GameController" ) || (who.gameObject.tag == "car" )) {
 			findProps();
 			notify(theObjective, "InTriggerSpace", null);
 		}
@@ -19,7 +19,7 @@ class ObjectiveTrigger extends WorldObject {
 	/// Goodbye !
 	function OnTriggerExit(who : Collider) {
 		/// He's leaving you !
-		if( who.gameObject.tag == "GameController" ) {
+		if ((who.gameObject.tag == "GameController" ) || (who.gameObject.tag == "car" )) {
 			findProps();			
 			notify(theObjective, "OutTriggerSpace", null);			
 		}
