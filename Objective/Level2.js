@@ -11,6 +11,8 @@ class Level2 extends Objective {
 	
 	private var houseVicinity : boolean = false;
 	
+	private var exit_attic : boolean = false;
+	
 	private var timeCreated : float;
 	
 	private var startFloodingTime : float = -1;
@@ -19,7 +21,9 @@ class Level2 extends Objective {
 		subtitleDelay = 0;
 		timeCreated = Time.realtimeSinceStartup;
 		nextLevel = "";
-		
+	
+		findProps();
+		theDirector.setRain(0);	
 	}
 
 
@@ -39,6 +43,7 @@ class Level2 extends Objective {
 	
 	function didRestoreState() {
 		findProps();
+		Debug.Log("Restore state");
 		if (theDirector.globalState.Contains("car_pos")) {
 			car.transform.position = theDirector.globalState["car_pos"];	
 		}
@@ -47,10 +52,20 @@ class Level2 extends Objective {
 			car.transform.rotation = theDirector.globalState["car_rot"];	
 		}
 
-		if (theDirector.globalState.Contains("startFloodingTime")) {
+		if (theDirector.globalState.Contains("flood_starttime")) {
 			startFloodingTime = theDirector.globalState["flood_starttime"];	
 		}
 
+		if (theDirector.globalState.Contains("exit_attic")) {
+			exit_attic = theDirector.globalState["exit_attic"];
+			if (exit_attic) {
+				thePlayer.transform.position.x = 792.1302;
+				thePlayer.transform.position.y = 381.9263;
+				thePlayer.transform.position.z = -735.8791;
+				
+				// -1614.024 41.57388 -558.1433
+			}
+		}
 		
 		if (theDirector.globalState.Contains("lucySaved")) {
 			lucySaved = theDirector.globalState["lucySaved"];
@@ -159,7 +174,7 @@ class Level2 extends Objective {
 		}
 		
 		if (Input.GetKeyUp("e") && (houseVicinity)) {
-			theDirector.load_level("");
+			theDirector.load_level("3storeyhouse");
 		}
 		
 	}
