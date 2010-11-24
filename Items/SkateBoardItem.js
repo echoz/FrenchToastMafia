@@ -1,5 +1,8 @@
 class SkateBoardItem extends InventoryItem {
 	
+	var normalSpeed : float = 20;
+	var skateSpeed : float = 50;
+	
 	function Awake() {
 		worldName  = "Skateboard";
 		description = "Skate Skate Skate!! Run Run Run!!";
@@ -29,14 +32,14 @@ class SkateBoardItem extends InventoryItem {
 	function performFunction() {		
 		findProps();
 
-		if (FPSWalker.speed == 20) {
-			FPSWalker.speed = 40;
-			theDirector.addSubtitle(new Subtitle("Skateboard! Wheeeeeeeeeeeeeeeeee!", 3,0.5));
+		if (FPSWalker.speed == normalSpeed) {
+			FPSWalker.speed = skateSpeed;
+			theDirector.addSubtitle(new Subtitle("Skateboard! Wheeeeeeeeeeeeeeeeee!", 3));
 
 		}
 		else {
-			FPSWalker.speed = 20;
-			theDirector.addSubtitle(new Subtitle("Got off the skateboard", 3,0.5));
+			FPSWalker.speed = normalSpeed;
+			theDirector.addSubtitle(new Subtitle("Got off the skateboard", 3));
 		}
 	}	
 	function willThrowItem() {
