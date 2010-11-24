@@ -2,6 +2,7 @@ class Director extends MonoBehaviour {
 	
 	var timeLimit : int = 17; // in minutes
 	var hasState : boolean = false;
+	var developer : boolean = false;
 	
 	var subtitleStyle = new GUIStyle();
 	
@@ -33,9 +34,8 @@ class Director extends MonoBehaviour {
 	
 	public var timeCreated : float;
 	
-	// existing water level: 23, raise to 345. underwater surface move to 344
-	
-	private static var timeStartCountdown : float = -1;
+	private var modifier : float = 0;
+	var timeStartCountdown : float = -1;
 	
 	function Start() {
 		this.findProps();
@@ -165,13 +165,19 @@ class Director extends MonoBehaviour {
 	}
 	
 	function Update() {
-		if (Input.GetKeyUp("p")) {
-			Debug.Log(backpack_items);
-		}	
+		if (developer) {
+			if (Input.GetKeyUp("p")) {
+				Debug.Log(backpack_items);
+			}				
+			if (Input.GetKeyUp("1")) {
+				modifier+=10;	
+			}
+		}
 		
 		if (Input.GetKeyUp("`")) {
 			this.nextSubtitle();	
 		}
+		
 	}
 	
 	
@@ -207,6 +213,13 @@ class Director extends MonoBehaviour {
 		var subtitleLeftPadding : float = 100.0;
 		var subtitleRightPadding: float = 100.0;
 		var subtitleHeight : float = 100.0;
+		
+				
+		if (developer) {
+			var water : GameObject = GameObject.FindWithTag("Water");
+			if ((thePlayer) && (water))
+				GUI.Box(new Rect(500,200,400,100), "Player Pos: " + thePlayer.transform.position.x + "," + thePlayer.transform.position.y + "," + thePlayer.transform.position.z + "\nWater Level: " + water.transform.position.y);
+		}
 		
 		// time remaining
 		if (timeStartCountdown > 0) {
@@ -261,9 +274,30 @@ class Director extends MonoBehaviour {
 	// functions related to director
 	function remainingTime() {
 		if (timeStartCountdown > 0) {
-			return (timeLimit * 60) + timeSpentLoading - (Time.realtimeSinceStartup - timeStartCountdown);
+			return ((timeLimit * 60) + timeSpentLoading - (Time.realtimeSinceStartup - timeStartCountdown)) - modifier;
 		} else {
 			return -1;	
+		}
+	}
+	
+	function setWaterLevel(level : float) {
+		var water : GameObject = GameObject.FindWithTag("Water");
+		var underwater : GameObject = GameObject.FindWithTag("Underwater");
+		
+		if ((water) && (underwater)) {
+			water.transform.position.y = level;
+			underwater.transform.position.y = level - 0.5;	
+			
+		}
+	}
+	
+	function waterLevel() {
+		var water : GameObject = GameObject.FindWithTag("Water");
+		if (water) {
+			return water.transform.position.y;	
+		} else {
+			
+			return -1;
 		}
 	}
 	
