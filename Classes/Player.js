@@ -6,7 +6,7 @@ class Player extends WorldObject {
 	var healthSubtractDelta : float = -1;
 	
 	var drowningAudio : AudioClip;
-	public var extraAudioSource : AudioSource;
+	var extraAudioSource : AudioSource;
 	
 	private var healthBarLength : float;
 	private var lastUpdateHealth : float = 0;
