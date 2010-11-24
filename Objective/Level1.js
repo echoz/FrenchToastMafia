@@ -11,6 +11,7 @@ class Level1 extends Objective {
 	
 	private var macbookVicinity : boolean = false;
 	private var macbookDone : boolean = false;
+	private var showTimeRemain : boolean = false;
 	
 	function Awake() {
 		subtitleDelay = 0;
@@ -22,6 +23,10 @@ class Level1 extends Objective {
 		for (var lightt : GameObject in lights) {
 			lightt.light.intensity = 0;
 		}
+		
+		findProps();
+		theDirector.setRain(0.8);
+		
 	}
 
 	function notification(who : Object, msg : String, userInfo : Object) {
@@ -53,10 +58,10 @@ class Level1 extends Objective {
 		style.alignment = TextAnchor.MiddleCenter;
 		style.normal.textColor  = new Color(1,1,1,1);
 
-		if ((exitVicinity) && (exitAnyway) && (macbookDone)) {
+		if ((exitVicinity) && (exitAnyway) && (macbookDone) && (showTimeRemain)) {
 			GUI.Label (new Rect ((Screen.width - 300)/2,(Screen.height-50)/2,300,50), "Press [E] to leave house anyway", style);
 
-		} else if ((exitVicinity) && (!exitAnyway) && (macbookDone)) {
+		} else if ((exitVicinity) && (!exitAnyway) && (macbookDone) && (showTimeRemain)) {
 			GUI.Label (new Rect ((Screen.width - 300)/2,(Screen.height-50)/2,300,50), "Press [E] to leave house", style);			
 		}
 		
@@ -110,7 +115,7 @@ class Level1 extends Objective {
 		
 		
 		// track keypress
-		if (Input.GetKeyUp("e") && (exitVicinity) && (macbookDone)) {
+		if (Input.GetKeyUp("e") && (exitVicinity) && (macbookDone) && (showTimeRemain)) {
 			
 			if (!exitAnyway) {
 				var msgs = checkBackpack();
@@ -146,6 +151,7 @@ class Level1 extends Objective {
 	function subtitleCallback(msg : String) {
 		if (msg == "timeRemain") {
 			theDirector.startCountdown();
+			showTimeRemain = true;
 		}	
 	}
 	
