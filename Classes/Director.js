@@ -1,7 +1,6 @@
 class Director extends MonoBehaviour {
 	
 	var timeLimit : int = 17; // in minutes
-	var hasState : boolean = false;
 	var developer : boolean = false;
 	
 	var subtitleStyle = new GUIStyle();
@@ -34,6 +33,8 @@ class Director extends MonoBehaviour {
 	
 	public var timeCreated : float;
 	
+	private static var hasState : boolean = false;
+	
 	private var modifier : float = 0;
 	var timeStartCountdown : float = -1;
 	
@@ -49,6 +50,8 @@ class Director extends MonoBehaviour {
 	
 	function saveState() {
 
+		findProps();
+
 		var objective;
 
 		if (GameObject.FindWithTag("objective")) {
@@ -57,7 +60,9 @@ class Director extends MonoBehaviour {
 		
 		objective.willSaveState();
 		
-		if (gameController) {		
+		if (gameController) {
+			hasState = true;
+			
 			backpack_items = new Array();
 			if (gameController.GetComponent(Backpack).items.length > 0) {
 				copyArray(gameController.GetComponent(Backpack).items,backpack_items);
@@ -68,17 +73,19 @@ class Director extends MonoBehaviour {
 			player_health = gameController.GetComponent(Player).health;
 			player_position = gameController.transform.position;
 			player_rotation = gameController.transform.rotation;
-			hasState = true;
 		}
 		
 		objective.didSaveState();		
 	}
 	
 	function restoreState() {
+		Debug.Log("DIRECTOR: Sending Restore state msg");
+		
 		var objective;
 
 		if (GameObject.FindWithTag("objective")) {
 			objective = GameObject.FindWithTag("objective").GetComponent(Objective);
+			Debug.Log("Objective exists!");
 		}
 		
 		if (objective)
@@ -101,19 +108,22 @@ class Director extends MonoBehaviour {
 			hasState = false;
 		}
 		if (objective)
-			objective.didRestoreState();		
+			objective.didRestoreState();
+			
 	}
 	
 	// state
 	function OnLevelWasLoaded (level : int) {
 		findProps();
 		cullClones();
-
+	
 		if ((previousLevelName == Application.loadedLevelName) && (gameController)) {
 			gameController.transform.position = player_position;
 			gameController.transform.rotation = player_rotation;
 	
 		}
+		
+		Debug.Log(gameController + ":" + hasState);
 		
 		if ((gameController) && (hasState)) {
 			restoreState();	
@@ -177,9 +187,9 @@ class Director extends MonoBehaviour {
 			}
 			if (Input.GetKeyUp("2")) {
 
-				thePlayer.transform.position.x = 774.3374;
-				thePlayer.transform.position.y = 356.3063;
-				thePlayer.transform.position.z = -718.8393;
+				thePlayer.transform.position.x = 792.1302;
+				thePlayer.transform.position.y = 381.9263;
+				thePlayer.transform.position.z = -735.8791;
 			}
 		}
 		
@@ -346,7 +356,7 @@ class Director extends MonoBehaviour {
 	}
 	
 	function findProps() {
-		water = GameObject.FindWithTag("Water");
+		water = GameObject.FindWithTag("WaterLevel");
 		thePlayer = GameObject.FindWithTag("Player");
 		gameController = GameObject.FindWithTag("GameController");
 	}
