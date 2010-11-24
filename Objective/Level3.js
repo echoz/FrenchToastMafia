@@ -85,7 +85,7 @@ class Level3 extends Objective {
 		if (Input.GetKeyUp("e") && (atticVicinity)) {
 			theDirector.globalState.Remove("exit_attic");
 			theDirector.globalState.Add("exit_attic", true);
-			theDirector.previous_level();
+			theDirector.load_level("errrr");
 		}
 		
 	}
