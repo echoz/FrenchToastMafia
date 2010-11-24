@@ -31,6 +31,11 @@ class CameraItem extends InventoryItem {
 	function equippedDidGUIFunction() {
 	}
 	function performFunction() {
+		findProps();
+		var audiosrc = thePlayer.GetComponent(Player).extraAudioSource;
+		audiosrc.PlayOneShot(performAudio);
+		
+		
 		//var screenshotCount : int = 1;
 		var screenshotFilename : String = "screenshot" + screenshotCount + ".png";
 		while (File.Exists(screenshotFilename))

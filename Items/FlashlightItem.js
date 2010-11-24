@@ -31,6 +31,9 @@ class FlashlightItem extends InventoryItem {
 	}
 	function performFunction() {
 		findProps();
+		var audiosrc = thePlayer.GetComponent(Player).extraAudioSource;
+		audiosrc.PlayOneShot(performAudio);
+		
 		switchedOn = !switchedOn;
 		flashlight.enabled = switchedOn;
 	}

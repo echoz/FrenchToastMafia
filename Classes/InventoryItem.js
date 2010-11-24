@@ -6,6 +6,8 @@ class InventoryItem extends WorldObject {
 	var prefabName : String;
 	var className : String;
 	
+	var performAudio : AudioClip;
+	
 	var icon_small : Texture;
 	var icon_large : Texture;
 	

@@ -46,6 +46,9 @@ class RadioItem extends InventoryItem {
 	function performFunction() {
 		findProps();
 		if (sosSent) {
+			var audiosrc = thePlayer.GetComponent(Player).extraAudioSource;
+			audiosrc.PlayOneShot(performAudio);
+			
 			switchedOn = !switchedOn;
 			director.addSubtitle(new Subtitle("Radio switched " + ((switchedOn)?"on":"off") + "", 2));	
 		} else {
