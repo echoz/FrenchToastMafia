@@ -108,14 +108,17 @@ class Director extends MonoBehaviour {
 	function OnLevelWasLoaded (level : int) {
 		findProps();
 		cullClones();
-		if ((gameController) && (hasState)) {
-			restoreState();	
-		}
+
 		if ((previousLevelName == Application.loadedLevelName) && (gameController)) {
 			gameController.transform.position = player_position;
 			gameController.transform.rotation = player_rotation;
 	
 		}
+		
+		if ((gameController) && (hasState)) {
+			restoreState();	
+		}
+
 		if ((Time.realtimeSinceStartup - loadLevelTimeStamp) > 0) {
 			timeSpentLoading += Time.realtimeSinceStartup - loadLevelTimeStamp;
 		}
@@ -171,6 +174,12 @@ class Director extends MonoBehaviour {
 			}				
 			if (Input.GetKeyUp("1")) {
 				modifier+=10;	
+			}
+			if (Input.GetKeyUp("2")) {
+
+				thePlayer.transform.position.x = 774.3374;
+				thePlayer.transform.position.y = 356.3063;
+				thePlayer.transform.position.z = -718.8393;
 			}
 		}
 		
@@ -281,18 +290,16 @@ class Director extends MonoBehaviour {
 	}
 	
 	function setWaterLevel(level : float) {
-		var water : GameObject = GameObject.FindWithTag("Water");
-		var underwater : GameObject = GameObject.FindWithTag("Underwater");
+		var water : GameObject = GameObject.FindWithTag("WaterLevel");
 		
-		if ((water) && (underwater)) {
+		if (water) {
 			water.transform.position.y = level;
-			underwater.transform.position.y = level - 0.5;	
 			
 		}
 	}
 	
 	function waterLevel() {
-		var water : GameObject = GameObject.FindWithTag("Water");
+		var water : GameObject = GameObject.FindWithTag("WaterLevel");
 		if (water) {
 			return water.transform.position.y;	
 		} else {
@@ -318,6 +325,12 @@ class Director extends MonoBehaviour {
 		var rain = GameObject.FindWithTag("rain");
 		rain.particleEmitter.emit = false;
 		rain.audio.Stop();
+	}
+	
+	function stopRainEffects() {
+		var rain = GameObject.FindWithTag("rain");
+		rain.particleEmitter.emit = false;
+		
 	}
 	
 	function setSky(intense : float) {
