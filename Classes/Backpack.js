@@ -321,6 +321,15 @@ class Backpack extends MonoBehaviour {
 		return -1;
 	}
 	
+	function firstIndexOfItemType(itemtype : String, items : Array) {
+		for (var i=0;i<items.length;i++) {
+			if (items[i].className == itemtype) {
+				return i;	
+			}	
+		}	
+		return -1;
+	}
+	
 	function hasItem(item) {
 		if (indexOfItem(item, items) < 0) {
 			return false;	
