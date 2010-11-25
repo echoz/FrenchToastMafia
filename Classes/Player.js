@@ -56,6 +56,8 @@ class Player extends WorldObject {
 			if (health < 0) {
 				health = 0;
 				died();
+				var theDirector = GameObject.FindWithTag("god").GetComponent(Director);		
+				theDirector.addSubtitle(new Subtitle("Player has died", 10000));				
 			}
 				
 			if (health > maxHealth)
@@ -72,7 +74,7 @@ class Player extends WorldObject {
 		var theDirector = GameObject.FindWithTag("god").GetComponent(Director);
 		thePlayer.GetComponent(MouseLook).enabled = false;
 		thePlayer.GetComponent(FPSWalker).enabled = false;
-		theDirector.addSubtitle(new Subtitle("Player has died", 10000));
+
 		
 	}
 }
