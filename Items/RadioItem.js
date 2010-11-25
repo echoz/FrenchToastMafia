@@ -3,6 +3,9 @@ class RadioItem extends InventoryItem {
 	var switchedOn : boolean = false;
 	var sosSent : boolean = false;
 	private var director : Director;
+	
+	private var periodicMsg = new Array();
+	private var sosSentTime : float;
 
 	function Awake() {
 		worldName  = "Amateur Radio";
@@ -11,7 +14,10 @@ class RadioItem extends InventoryItem {
 		unitSpaceRequired = 1;
 		consummable = false;
 		prefabName = "Radio";
-		className = "RadioItem";		
+		className = "RadioItem";
+		
+		periodicMsg.Add("Radio: This is the evac center. Please make your way to higher ground.");
+		periodicMsg.Add("Radio: The water is rising fast. Please hurry up!");
 	}
 
 	function activeWillUpdateFunction() {
@@ -23,12 +29,13 @@ class RadioItem extends InventoryItem {
 	function activeDidGUIFunction() {
 	}
 	function equippedWillUpdateFunction() {
-		if (switchedOn) {
-			// radio messages	
-			
-		}
+		// no periodic messages.
 		
 	}
+	
+	function subtitleCallback(msg : String) {
+	}
+		
 	function equippedDidUpdateFunction() {
 	}
 	function equippedWillGUIFunction() {
@@ -40,6 +47,9 @@ class RadioItem extends InventoryItem {
 		findProps();
 		if (director.globalState.Contains("sosSent")) {
 			sosSent = director.globalState["sosSent"];
+		}		
+		if (director.globalState.Contains("sosSentTime")) {
+			sosSentTime = director.globalState["sosSentTime"];
 		}		
 	}
 	
