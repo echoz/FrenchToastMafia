@@ -48,7 +48,7 @@ class RadioNPC extends NPC {
 			} else {
 				freqTextTextStyle.normal.textColor = Color.red;				
 			}	
-			GUI.Label(new Rect(Screen.width - 740, Screen.height - 400, 350, 300), freqText.guiText.text, freqTextTextStyle);
+			GUI.Label(new Rect(Screen.width - 740, Screen.height - 450, 350, 300), freqText.guiText.text, freqTextTextStyle);
 		}	
 		
 		//display the instructions and the morse code image
@@ -59,14 +59,30 @@ class RadioNPC extends NPC {
 		if (!PTTENABLED) {	
 			// display correct code stuff
 			if (CODE == CORRECT_CODE) {
+				GUI.Window (0, new Rect ((Screen.width-300)/2,(Screen.height-150)/2,300,150), DoWindow, "SOS Sent!");
+				
+			}
+		}
+	}
+	
+	
+	function DoWindow (windowID : int) {
+		if (windowID == 0) {
+			GUI.Label (new Rect(10, 15, 280, 280), "Radio Person: Please make your way to higher ground!");
+			//player chooses to help
+			if(GUI.Button(new Rect(100, 95, 100,25), "Okay", "button"))
+			{
 				Destroy (this);
 				
 				var director = GameObject.FindWithTag("god").GetComponent(Director);
 				director.globalState.Remove("sosSent");
 				director.globalState.Add("sosSent", true);
+				director.globalState.Remove("sosSentTime");
+				director.globalState.Add("sosSentTime", Time.realtimeSinceStartup);
 				director.previous_level();
-			}
-		}
+
+			}			
+		} 
 	}
 
 	function Update() {
