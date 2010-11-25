@@ -48,6 +48,19 @@ class Director extends MonoBehaviour {
 		DontDestroyOnLoad(this);
 	}
 	
+	function infanticide() {
+		globalState.Clear();
+		player_positon = null;
+		player_rotation = Quaternion.identity;
+		player_health = 0.0;
+		loadLevelTimeStamp = 0;
+		timeCreated = 0;
+		hasState = false;
+		backpack_items.Clear();
+		backpack_activeItem = 0;
+		backpack_hasActive = false;
+	}
+	
 	function saveState() {
 
 		findProps();
@@ -192,12 +205,6 @@ class Director extends MonoBehaviour {
 			}				
 			if (Input.GetKeyUp("1")) {
 				modifier+=10;	
-			}
-			if (Input.GetKeyUp("2")) {
-
-				thePlayer.transform.position.x = 792.1302;
-				thePlayer.transform.position.y = 381.9263;
-				thePlayer.transform.position.z = -735.8791;
 			}
 		}
 		
