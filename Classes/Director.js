@@ -177,6 +177,14 @@ class Director extends MonoBehaviour {
 
 	}
 	
+	function modifyScore(scoreDelta : float) {
+		score += scoreDelta;
+	}
+	
+	function playerScore() {
+		return score;	
+	}
+	
 	function Update() {
 		if (developer) {
 			if (Input.GetKeyUp("p")) {
@@ -235,9 +243,9 @@ class Director extends MonoBehaviour {
 		
 				
 		if (developer) {
-			var water : GameObject = GameObject.FindWithTag("Water");
-			if ((thePlayer) && (water))
-				GUI.Box(new Rect(500,200,400,100), "Player Pos: " + thePlayer.transform.position.x + "," + thePlayer.transform.position.y + "," + thePlayer.transform.position.z + "\nWater Level: " + water.transform.position.y);
+//			var water : GameObject = GameObject.FindWithTag("Water");
+//			if ((thePlayer) && (water))
+//				GUI.Box(new Rect(500,200,400,100), "Player Pos: " + thePlayer.transform.position.x + "," + thePlayer.transform.position.y + "," + thePlayer.transform.position.z + "\nWater Level: " + water.transform.position.y);
 		}
 		
 		// time remaining
