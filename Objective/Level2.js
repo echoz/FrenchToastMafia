@@ -13,6 +13,16 @@ class Level2 extends Objective {
 	
 	private var exit_attic : boolean = false;
 	
+	private var safe : boolean = false;
+	private var safeNotified : boolean = false;
+	private var safeWindow : boolean = false;
+	
+	private var safeHouse : boolean = false;
+	private var safeHouseNotified : boolean = false;
+	private var safeHouseWindow : boolean = false;
+		
+	private var shownAccidentTrigger : boolean = false;
+		
 	private var timeCreated : float;
 	
 	private var startFloodingTime : float = -1;
@@ -92,10 +102,83 @@ class Level2 extends Objective {
 					startFloodingTime = Time.realtimeSinceStartup;	
 				}	
 			}
+			
 			if (who.worldName == "AbandonedHouseTrigger") {
 				houseVicinity = true;	
 			}
 			
+			if (who.worldName == "SafeTrigger") {
+				if (!safe) {
+					safe = true;	
+				}	
+			}
+			
+			if (who.worldName == "SafeHouseTrigger") {
+				if (!safeHouse) {
+					safeHouse = true;	
+				}	
+			}
+			
+			if (who.worldName == "Accident1Trigger") {
+				if (!shownAccidentTrigger) {
+					theDirector.addSubtitle(new Subtitle("Michael: Crikey! I need to make a detour...", 3, 0.5, this, "shownAccidentTrigger"));
+				}	
+				theDirector.modifyScore(50);
+			}
+			if (who.worldName == "Accident2Trigger") {
+				if (!shownAccidentTrigger) {
+					theDirector.addSubtitle(new Subtitle("Michael: Crikey! I need to make a detour...", 3, 0.5, this, "shownAccidentTrigger"));
+				}	
+				theDirector.modifyScore(50);
+			}
+			if (who.worldName == "Accident3Trigger") {
+				if (!shownAccidentTrigger) {
+					theDirector.addSubtitle(new Subtitle("Michael: Crikey! I need to make a detour...", 3, 0.5, this, "shownAccidentTrigger"));
+				}	
+				theDirector.modifyScore(50);
+			}
+			if (who.worldName == "Accident4Trigger") {
+				if (!shownAccidentTrigger) {
+					theDirector.addSubtitle(new Subtitle("Michael: Crikey! I need to make a detour...", 3, 0.5, this, "shownAccidentTrigger"));
+				}	
+				theDirector.modifyScore(50);
+			}
+			if (who.worldName == "Accident5Trigger") {
+				if (!shownAccidentTrigger) {
+					theDirector.addSubtitle(new Subtitle("Michael: Crikey! I need to make a detour...", 3, 0.5, this, "shownAccidentTrigger"));
+				}	
+				theDirector.modifyScore(50);
+			}
+			if (who.worldName == "Accident6Trigger") {
+				if (!shownAccidentTrigger) {
+					theDirector.addSubtitle(new Subtitle("Michael: Crikey! I need to make a detour...", 3, 0.5, this, "shownAccidentTrigger"));
+				}	
+				theDirector.modifyScore(50);
+			}
+			if (who.worldName == "Accident7Trigger") {
+				if (!shownAccidentTrigger) {
+					theDirector.addSubtitle(new Subtitle("Michael: Crikey! I need to make a detour...", 3, 0.5, this, "shownAccidentTrigger"));
+				}	
+				theDirector.modifyScore(50);
+			}
+			if (who.worldName == "Accident8Trigger") {
+				if (!shownAccidentTrigger) {
+					theDirector.addSubtitle(new Subtitle("Michael: Crikey! I need to make a detour...", 3, 0.5, this, "shownAccidentTrigger"));
+				}	
+				theDirector.modifyScore(50);
+			}
+			if (who.worldName == "Accident9Trigger") {
+				if (!shownAccidentTrigger) {
+					theDirector.addSubtitle(new Subtitle("Michael: Crikey! I need to make a detour...", 3, 0.5, this, "shownAccidentTrigger"));
+				}	
+				theDirector.modifyScore(50);
+			}
+			if (who.worldName == "Accident10Trigger") {
+				if (!shownAccidentTrigger) {
+					theDirector.addSubtitle(new Subtitle("Michael: Crikey! I need to make a detour...", 3, 0.5, this, "shownAccidentTrigger"));
+				}	
+				theDirector.modifyScore(50);
+			}
 			
 			
 		} else if (msg == "OutTriggerSpace") {
@@ -126,13 +209,45 @@ class Level2 extends Objective {
 		if ((houseVicinity) && (!exit_attic)) {
 			GUI.Label (new Rect ((Screen.width - 300)/2,(Screen.height-50)/2,300,50), "Press [E] to enter house", style);			
 		}
+
+/*		
+		if ((safe) || (safeHouse)) {
+			GUI.Label (new Rect ((Screen.width - 300)/2,(Screen.height-50)/2,300,50), "Press [E] to end the game", style);
+		}
+*/		
+		if ((safe) && (!safeNotified)) {
+			// show safe and lock character
+			safeNotified = true;
+			theDirector.modifyScore(theDirector.remainingTime());
+			theDirector.addSubtitle(new Subtitle("Michael: Ahh, the Red Cross camp...", 5,0.5));
+			theDirector.addSubtitle(new Subtitle("Michael: I'm safe...", 5,0.5, this, "safeReached"));
+		}
+		
+		if ((safeHouse) && (!safeHouseNotified)) {
+			// show safe house ending
+			safeHouseNotified = true;
+			theDirector.modifyScore(theDirector.remainingTime());
+			theDirector.addSubtitle(new Subtitle("Michael: The water does seem to rise anymore...", 5,0.5));
+			theDirector.addSubtitle(new Subtitle("Michael: Guess I'll just wait here till help comes", 5,0.5, this, "safeHouseReached"));
+		}
+		
+		if(safeWindow) {
+			GUI.Window (0, new Rect ((Screen.width-300)/2,(Screen.height-150)/2,300,150), DoWindow, "Game Completed");
+		}		
+		if(safeHouseWindow) {
+			GUI.Window (1, new Rect ((Screen.width-300)/2,(Screen.height-150)/2,300,150), DoWindow, "Game Completed");
+		}		
 	}
 	
 	function FixedUpdate() {
 		if (startFloodingTime > 0) {
+			var floodTimeLimit = (theDirector.timeLimit * 60) - (startFloodingTime - theDirector.timeStartCountdown);
+			var level = ((1 - ((theDirector.remainingTime()  - startFloodingTime) / floodTimeLimit)) *  (358-23)) + 9;
+
 			if ((theDirector.waterLevel() > 0) && (theDirector.waterLevel() < 358)) {
-				var floodTimeLimit = (theDirector.timeLimit * 60) - (startFloodingTime - theDirector.timeStartCountdown);
-				theDirector.setWaterLevel(((1 - ((theDirector.remainingTime()  - startFloodingTime) / floodTimeLimit)) *  (358-23)) + 9);
+				theDirector.setWaterLevel(level);
+			} else {
+				theDirector.setWaterLevel(358);
 			}
 		}
 	}
@@ -177,7 +292,40 @@ class Level2 extends Objective {
 		
 	}
 	
+	function DoWindow (windowID : int) {
+		if (windowID == 0) {
+			GUI.Label (new Rect(10, 15, 280, 280), "Congratulations!\n\nYou've made it to the safety of the Red Cross camp.\n\nYour score is " + theDirector.playerScore());
+			//player chooses to help
+			if(GUI.Button(new Rect(100, 95, 100,25), "Quit Game", "button"))
+			{
+				Application.LoadLevel("Menu");
+			}			
+		} else if (windowID == 1) {
+			GUI.Label (new Rect(10, 15, 280, 280), "Congratuations!\n\nNot exactly that safe, but getting there. From here, you can wait for help.\n\nYour score is " + theDirector.playerScore());
+			//player chooses to help
+			if(GUI.Button(new Rect(100, 95, 100,25), "Quit Game", "button"))
+			{
+				Application.LoadLevel("Menu");
+			}				
+		}	
+	}
+	
 	function subtitleCallback(msg : String) {
+		
+		if (msg == "safeReached") {
+			thePlayer.GetComponent(Player).died();
+			Screen.lockCursor = false;
+			safeWindow = true;			
+			// show shit
+		} else if (msg == "safeHouseReached") {
+			thePlayer.GetComponent(Player).died();
+			Screen.lockCursor = false;
+			safeHouseWindow = true;
+			// show shit
+			
+		} else if (msg == "showAccidentTrigger") {
+			showAccidentTrigger = false;	
+		}
 	}
 	
 }
