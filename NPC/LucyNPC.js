@@ -142,6 +142,7 @@ class LucyNPC extends NPC {
 			//player will leave scene and score will be updated
 			
 				var director = GameObject.FindWithTag("god").GetComponent(Director);
+				director.modifyScore(100);
 				director.globalState.Remove("lucySaved");
 				director.globalState.Add("lucySaved", true);
 				director.previous_level();
