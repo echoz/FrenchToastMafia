@@ -47,6 +47,11 @@ class FluteItem extends InventoryItem {
 		
 	}		
 	function willThrowItem() {
+		if (playing) {
+			findProps();
+			var audiosrc = thePlayer.GetComponent(Player).extraAudioSource;
+			audiosrc.Stop();
+		}
 	}
 	function didThrowItem() {
 	}
