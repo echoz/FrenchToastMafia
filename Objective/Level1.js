@@ -126,12 +126,31 @@ class Level1 extends Objective {
 					for (var msg in msgs) {
 						theDirector.addSubtitle(msg);	
 					}
-				}
-				
+					
+				} 
 				exitAnyway = true;
 				
 			} else {
 				// calculate and update scores first
+				if (thePlayer.GetComponent(Backpack).hasItemOfType("GPSItem")) {
+					theDirector.modifyScore(100);	
+				}
+				if (thePlayer.GetComponent(Backpack).hasItemOfType("RadioItem")) {
+					theDirector.modifyScore(100);	
+				}
+				if (thePlayer.GetComponent(Backpack).hasItemOfType("RopeItem")) {
+					theDirector.modifyScore(100);	
+				}
+				if (thePlayer.GetComponent(Backpack).hasItemOfType("CarKeyItem")) {
+					theDirector.modifyScore(100);	
+				}
+				if (thePlayer.GetComponent(Backpack).hasItemOfType("FirstAidItem")) {
+					theDirector.modifyScore(100);	
+				}
+				if (thePlayer.GetComponent(Backpack).hasItemOfType("FlashlightItem")) {
+					theDirector.modifyScore(100);	
+				}
+				
 				theDirector.load_level("errrr");
 			}
 		}
